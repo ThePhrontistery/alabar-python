@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "alabar-python"
+version = "0.1.0"
+description = "Alabar is a fast and convenient ways to get the opinion of people on various topics, implemented in Python"
+authors = ["Iwan van der Kleijn <iwan-rochus.van-der-kleijn@capgemini.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "alabar_python"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^2.2.2"
+pydantic = "^1.10.4"
+flask-sqlalchemy = "^3.0.3"
+bcrypt = "^4.0.1"
+pytest = "^7.2.1"
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
