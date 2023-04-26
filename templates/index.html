@@ -1,0 +1,53 @@
+
+{% extends '/base.html' %}
+
+
+{% block content %}
+
+<h1 class="text-xl font-bold ">Available topics for you</h1>
+
+<div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Owner</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- row 1 -->
+        <tr>
+          <td> ♠A of ♠ - Consum Sprint 17</td>
+          <td>Open - please vote</td>
+          <td>Marga Nacher</td>
+          <td>20-04-2023</td>
+        </tr>
+        <!-- row 2 -->
+        <tr>
+          <td>Rate Demo Sprint 16</td>
+          <td>Open - please vote</td>
+          <td>Marga Nacher</td>
+          <td>18-04-2023</td>
+        </tr>
+        <!-- row 3 -->
+        <tr>
+          <td>♠A of ♠ - Consum Sprint 16</td>
+          <td>Closed - view results</td>
+          <td>Marga Nacher</td>
+          <td>01-04--2023</td>
+        </tr>
+         <!-- row 4 -->
+         <tr>
+            <td>¿Cuándo vamos a la Oficina?</td>
+            <td>Closed - view results</td>
+            <td>Gonzalo Pardo</td>
+            <td>12-02-2023</td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {% endblock %}
