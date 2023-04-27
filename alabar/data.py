@@ -11,9 +11,5 @@ def get_topics_by_user(user_id):
     topic_ticket = get_topic_ticket_by_id(user_id)
     topics_users = []
     for i in topic_ticket:
-        #mood_total = mood_total + int(i[0])
-        #print ("mood total dentro del bucle: ", mood_total)   
         topics_users.append(i.topics) 
-    #mood_total = sum(int(item_answer[0]) for item_answer in answer) 
-    return topics_users 
-    #return topic_ticket[0].topics
+    return topics_users
