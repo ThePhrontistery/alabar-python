@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1 class="text-xl font-bold ">Available topics for you</h1>
-
+<form action="{{ url_for('index') }}" method="POST">
 <div class="overflow-x-auto">
     <table class="table table-zebra w-full">
       <!-- head -->
@@ -18,36 +18,45 @@
         </tr>
       </thead>
       <tbody>
-        <!-- row 1 -->
+        {% for topic in table_topics %}
         <tr>
+          <td>{{topic.title_topic}}</td>
+          <td>{{topic.status}}</td>
+          <td>{{topic.owner_topic}}</td>
+          <td>{{topic.start_date}}</td>
+        </tr>
+        {% endfor %}
+        <!-- row 1 -->
+        <!-- <tr>
           <td> ♠A of ♠ - Consum Sprint 17</td>
           <td>Open - please vote</td>
           <td>Marga Nacher</td>
           <td>20-04-2023</td>
-        </tr>
+        </tr>-->
         <!-- row 2 -->
-        <tr>
+        <!-- <tr>
           <td>Rate Demo Sprint 16</td>
           <td>Open - please vote</td>
           <td>Marga Nacher</td>
           <td>18-04-2023</td>
-        </tr>
+        </tr>-->
         <!-- row 3 -->
-        <tr>
+        <!-- <tr>
           <td>♠A of ♠ - Consum Sprint 16</td>
           <td>Closed - view results</td>
           <td>Marga Nacher</td>
           <td>01-04--2023</td>
-        </tr>
+        </tr>-->
          <!-- row 4 -->
-         <tr>
+         <!-- <tr>
             <td>¿Cuándo vamos a la Oficina?</td>
             <td>Closed - view results</td>
             <td>Gonzalo Pardo</td>
             <td>12-02-2023</td>
-          </tr>
+          </tr>-->
       </tbody>
     </table>
   </div>
+</form>  
 
   {% endblock %}
