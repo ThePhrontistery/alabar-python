@@ -21,9 +21,13 @@
         {% for topic in table_topics %}
         <tr>
           <td>{{topic.title_topic}}</td>
-          <td>{{topic.status}}</td>
+          {% if topic.status == 1 %}
+            <td>Open - please vote</td>
+          {% else %} 
+            <td>Closed - view results</td>
+          {%endif%}
           <td>{{topic.owner_topic}}</td>
-          <td>{{topic.start_date}}</td>
+          <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
         </tr>
         {% endfor %}
         <!-- row 1 -->
