@@ -36,10 +36,10 @@ VALUES
 INSERT INTO topic
 (id_topic, title_topic, owner_topic, type_topic, start_date, end_date, status, participation,close_date)
 VALUES
-(1, '♠A of ♠ - Consum Sprint 17', Marga Nacher, 'AceOfSpadesTopic', '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(2, 'Rate Demo Sprint 16', Marga Nacher, 'RatingTopic', '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(3, '♠A of ♠ - Consum Sprint 16', Marga Nacher, 'AceOfSpadesTopic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(4, '¿Cuándo vamos a la Oficina?', Gonzalo Pardo, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000');
+(1, '♠A of ♠ - Consum Sprint 17', 1, 'AceOfSpadesTopic', '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
+(2, 'Rate Demo Sprint 16', 1, 'RatingTopic', '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
+(3, '♠A of ♠ - Consum Sprint 16', 1, 'AceOfSpadesTopic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
+(4, '¿Cuándo vamos a la Oficina?', 2, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000');
 
 -- 1 = completed, 0 = not completed
 INSERT INTO topic_ticket
