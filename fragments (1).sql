@@ -53,13 +53,13 @@ VALUES
 (2, 2, 0),
 (2, 3, 0);
 
-INSERT INTO user_topic
-(topic_id, user_id)
-VALUES
-(1, 2),
-(2, 2),
-(3, 2),
-(1, 1),
-(2, 1),
-(3, 1),
-(4, 1);
+--INSERT INTO user_topic
+(--topic_id, user_id)
+--VALUES
+--(1, 2),
+--(2, 2),
+--(3, 2),
+--(1, 1),
+--(2, 1),
+--(3, 1),
+--(4, 1);
