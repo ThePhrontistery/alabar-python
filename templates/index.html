@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1 class="text-xl font-bold ">Available topics for you</h1>
+<h1 class="text-xl font-bold">Available topics for you</h1>
 <form action="{{ url_for('index') }}" method="POST">
 <div class="overflow-x-auto">
     <table class="table table-zebra w-full">
@@ -20,10 +20,14 @@
       <tbody>
         {% for topic in table_topics %}
         <tr>
-          <td>{{topic.title_topic}}</td>
-          <td>{{topic.status}}</td>
+          <td><a href="topic.html">{{topic.title_topic}}</a></td>
+          {% if topic.status == 1 %}
+            <td>Open - please vote</td>
+          {% else %} 
+            <td>Closed - view results</td>
+          {%endif%}
           <td>{{topic.owner_topic}}</td>
-          <td>{{topic.start_date}}</td>
+          <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
         </tr>
         {% endfor %}
         <!-- row 1 -->
