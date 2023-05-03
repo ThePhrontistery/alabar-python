@@ -19,8 +19,9 @@
       </thead>
       <tbody>
         {% for topic in table_topics %}
+        <input type="hidden" name="topic_id" value={{topic.id_topic}}>
         <tr>
-          <td><a href="topic.html">{{topic.title_topic}}</a></td>
+          <td><a href="{{url_for('alabar.rating')}}">{{topic.title_topic}}</a></td>
           {% if topic.status == 1 %}
             <td>Open - please vote</td>
           {% else %} 
@@ -28,6 +29,8 @@
           {%endif%}
           <td>{{topic.id_owner}}</td>
           <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
+          <td class="{{'hidden' if user_session != 'Marga Nacher'}}">Reopen
+            Delete</td>
         </tr>
         {% endfor %}
         <!-- row 1 -->
@@ -61,6 +64,6 @@
       </tbody>
     </table>
   </div>
-</form>  
+</form>
 
   {% endblock %}
