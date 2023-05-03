@@ -19,3 +19,7 @@ def get_topics_by_user(user_id):
     for i in topic_ticket:
         topics_users.append(i.topics) 
     return topics_users
+
+def get_topics_by_owner(user_id):
+    #Select Topic by id_owner
+    return db.session.execute(db.select(Topic).where(Topic.id_owner == user_id)).scalars().all()
