@@ -6,6 +6,9 @@ def get_user_by_name(user_name):
 def get_user_by_id(id_user):
     return db.session.execute(db.select(User).filter_by(id_user=id_user)).scalar_one_or_none()
 
+def get_user_by_code(code_user):
+    return db.session.execute(db.select(User).filter_by(code_user=code_user)).scalar_one_or_none()
+
 def get_topic_ticket_by_id(user_id):
     "Select tabla Topic_ticket by user_id"
     #return db.session.execute(db.select(Topic_ticket).filter_by(name_user=user_name)).scalar_one_or_none()
