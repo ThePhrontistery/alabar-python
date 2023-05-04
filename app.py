@@ -28,16 +28,16 @@ def login():
     error = None
 
     if request.method == 'POST':
-        username = request.form['username']
+        user_code = request.form['user_code']
         password = request.form['password']
 
-        user = get_user_by_code(username)
+        user = get_user_by_code(user_code)
 
         if user is None or not user.check_password(password):
-            error = 'Invalid username or password'
+            error = 'Invalid user or password'
         else:
             # Note: Flask session. NOT SqlAlchemy...
-            session['CURRENT_USER'] = username
+            session['CURRENT_USER'] = user_code
             return redirect(url_for('alabar.index'))
  
     return render_template('login.html', error=error)
