@@ -1,20 +1,18 @@
-				  
-				  
-						 
-						 
-					   
-				 
-					   
+DELETE FROM 'group';
+DELETE FROM topic;
+DELETE FROM topic_answer;
+DELETE FROM topic_ticket;
+DELETE FROM topic_item;
+DELETE FROM user;
+DELETE FROM user_group;
 
-
-						   
 INSERT INTO "user"
 (id_user, name_user,code_user, email_user, password_hash, password_salt,icon_user)
 VALUES
 (1, 'Marga Nacher','MNacher', 'marga@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
-(2, 'Gonzalo Pardo','GPardo', 'gonzalo@email.com', 's$$2b$12$6e2DSOJwq.Z/pz8LawWPH.5xl3RDDPuAFerF7Pi1SdOeeS.fy.Nmy', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
+(2, 'Gonzalo Pardo','GPardo', 'gonzalo@email.com', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.WXj3mfkitZkS76ykL61NQy1cwOFYhCS', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
 (3, 'Jill Esteban','JEsteban', 'jill@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO',''),
-(3, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','');
+(4, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','');
 
 INSERT INTO "group"
 (id_group, name_group,id_owner)
@@ -28,12 +26,12 @@ VALUES
 INSERT INTO user_group
 (user_id, group_id)
 VALUES
-	   
 (1, 2),
 (2, 1),
 (1, 3),
 (2, 3),
-(2, 4);
+(2, 4),
+(3, 4);
 
 --status = 1 = active, status = 0 = inactive
 INSERT INTO topic
@@ -49,16 +47,13 @@ VALUES
 -- 1 = completed, 0 = not completed
 INSERT INTO topic_ticket
 (user_id, topic_id, completed)
-VALUES
-		  
-		  
-		  
-		  
+VALUES	  
 (2, 1, 0),
 (2, 2, 0),
 (3, 2, 0),
 (1, 3, 0),
-(2, 4, 0);
+(2, 4, 0),
+(3, 4, 0);
 
 
 INSERT INTO topic_item
@@ -74,19 +69,6 @@ VALUES
 (8, 4, 2, 'Martes, Jueves'),
 (9, 4, 3, 'Una semana lu, mi, otra ma, jue'),
 (10, 4, 4, 'Me da igual');
-												 
-	  
-				  
-				   
-				  
-				  
-				   
-				  
-							  
-							
-											 
-						  
-
 
 --INSERT INTO user_topic
 (--topic_id, user_id)

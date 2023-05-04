@@ -3,7 +3,6 @@
 {% block content %}
 
 <h1 class="text-xl font-bold">{{topic.title_topic}}</h1>
-<input type="hidden" name="topic_id" value={{topic.id_topic}}>
 
 {% if topic.status == 0 %}
 <div class="grid grid-cols-2 gap-8">
@@ -26,6 +25,8 @@
 
 
 <form action="{{ url_for('alabar.rating_results') }}" method="POST">
+    <input type="hidden" name="topic_id" value={{topic.id_topic}}>
+    <!--pre>{{ topic.id_topic | pprint }}</pre-->
     <div class="space-y-4">
         <div class="flex items-center">
             <input type="radio" name="emoji" id="emoji1" class="form-radio h-5 w-5 text-blue-600" value="1">
