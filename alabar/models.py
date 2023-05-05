@@ -59,7 +59,7 @@ class Topic(db.Model):
     end_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.Boolean, default=False)
     participation = db.Column(db.Integer, nullable=False)
-    close_date = db.Column(db.DateTime, nullable=False)
+    deleted_date = db.Column(db.DateTime, nullable=False)
     answers = db.relationship('Topic_answer', backref='topic')
     #tickets = db.relationship('Topic_ticket', backref='topic')
     items = db.relationship('Topic_item', backref='topic')

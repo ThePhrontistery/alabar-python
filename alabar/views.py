@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_owner, get_topics_by_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results
-from mockdata.mockdata import get_answers, get_average, show_result
+from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results, topic_delete, topic_reopen
+from mockdata.mockdata import get_answers, get_average
 
 alabar_bp = Blueprint('alabar', __name__)
 
@@ -59,4 +59,19 @@ def rating_results():
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
+@alabar_bp.route('/alabar/reopen', methods=['GET'])
+def reopen():
+    id_topic = request.args.get('topic_id')
+    if topic_reopen(id_topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido reabrir, inténtelo más tarde")
 
+
+@alabar_bp.route('/alabar/delete', methods=['GET'])
+def delete():
+    id_topic = request.args.get('topic_id')
+    if topic_delete(id_topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
