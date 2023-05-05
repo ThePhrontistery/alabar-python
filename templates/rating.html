@@ -4,17 +4,17 @@
 
 <h1 class="text-xl font-bold">{{topic.title_topic}}</h1>
 
-{% if topic.status == 0 %}
+{% if topic.status == False %}
 <div class="grid grid-cols-2 gap-8">
     <div class="flex flex-col items-center">
         <span class="text-8xl">😀</span>
         <span class="text-lg mt-4">Happy</span>
     </div>
     <div class="space-y-4">
-        {% for _ in range(5) %}
+        {% for answer in answers %}
         <div class="flex items-center">
-            <span class="text-2xl">🙃</span>
-            <span class="font-bold text-xl ml-2">5 (2)</span>
+            <span class="text-2xl">{{answer.emoji}}</span>
+            <span class="font-bold text-xl ml-2">{{answer.order}} ({{answer.value}})</span>
         </div>
         {% endfor %}
     </div>
