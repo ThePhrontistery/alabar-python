@@ -35,12 +35,12 @@ VALUES
 
 --status = 1 = active, status = 0 = inactive
 INSERT INTO topic
-(id_topic, title_topic, id_owner, type_topic, start_date, end_date, status, participation,close_date)
+(id_topic, title_topic, id_owner, type_topic, start_date, end_date, status, participation,deleted_date)
 VALUES
-(1, '♠A of ♠ - Consum Sprint 17', 1, 'AceOfSpadesTopic', '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(2, 'Rate Demo Sprint 16', 1, 'RatingTopic', '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(3, '♠A of ♠ - Consum Sprint 16', 2, 'AceOfSpadesTopic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000'),
-(4, '¿Cuándo vamos a la Oficina?', 3, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', 1, 0,'9999-12-31 00:00:00.000000');
+(1, '♠A of ♠ - Consum Sprint 17', 1, 'AceOfSpadesTopic', '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(2, 'Rate Demo Sprint 16', 1, 'RatingTopic', '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(3, '♠A of ♠ - Consum Sprint 16', 2, 'AceOfSpadesTopic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(4, '¿Cuándo vamos a la Oficina?', 3, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000');
 
 
 

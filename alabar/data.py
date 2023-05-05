@@ -1,3 +1,4 @@
+import datetime
 from sqlalchemy import or_
 from session_context import transactional_session
 from .models import Topic_answer, User, Group, Topic, Topic_item, Topic_ticket, db
@@ -56,7 +57,7 @@ def get_topics_by_user_and_owner(user_id):
     where(Topic_ticket.user_id == user_id)
 
     s = select(Topic).\
-    where(Topic.close_date == '9999-12-31 00:00:00.000000').\
+    where(Topic.deleted_date == '9999-12-31 00:00:00.000000').\
     where(or_(Topic.id_owner == user_id,Topic.id_topic.in_(h)))
 
     return db.session.execute(s).scalars().all()
@@ -97,7 +98,7 @@ def update_ticket(user_code,id_topic):
                               .values(completed=ticket.completed))
 
 def update_topic(topic):
-    '''Update record in topic_ticket:
+    '''Update record in topic:
        Actualizamos en Topic la participacion y el status del topic (si es el ultimo usuario del grupo del topic en 
        contestar), pásandole el id_topic'''
     #answer tiene el resultado del metodo get_answers_by_id (que tiene todas las filas de la tabla topic_answer, 
@@ -123,8 +124,40 @@ def update_topic(topic):
     # Status: True (Open - please vote), False (Closed - view results) 
     # Si la participacion es del 100, se cambia el status a closes (0)
     if topic.participation == 100:
-        topic.status = 0
+        topic.status = False
     # Actualizamos status y participation
     return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
                               .values(status=topic.status, participation= topic.participation))
 
+def topic_reopen(id_topic):
+    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
+    #try:
+    with transactional_session() as session:
+    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
+       update_topic_reopen(get_topic_by_id(id_topic))
+       result = True
+       return result
+    
+def topic_delete(id_topic):
+    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
+    #try:
+    with transactional_session() as session:
+    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
+       update_topic_delete(get_topic_by_id(id_topic))
+       result = True
+       return result
+    
+def update_topic_reopen(topic):
+    '''Update record in topic:
+       Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic'''
+    topic.status = True
+    topic.end_date = datetime.datetime(9999, 12, 31, 00, 00, 00, 00000)
+    return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
+                              .values(status=topic.status, end_date= topic.end_date))
+
+def update_topic_delete(topic):
+    '''Update record in topic:
+       Actualizamos en Topic la fecha de borrado pásandole el id_topic'''
+    topic.deleted_date = datetime.date.today()
+    return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
+                              .values(deleted_date= topic.deleted_date))
