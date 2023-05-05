@@ -1,47 +1,46 @@
-
 {% extends '/base.html' %}
 
 
 {% block content %}
 
 <h1 class="text-xl font-bold">Available topics for you</h1>
-<form action="{{ url_for('alabar.rating') }}" method="POST">
 <div class="overflow-x-auto">
-    <table class="table table-zebra w-full">
-      <!-- head -->
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Owner</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for topic in table_topics %}
-        <!--input type="hidden" name="topic_id" value={{topic.id_topic}}-->
-        <tr>
-          <td>
-              <input type="hidden" name="topic_id" value="{{ topic.id_topic }}"/>
-              <button type="submit">{{ topic.title_topic}}</button>
-          </td>
-          {% if topic.status == 1 %}
-            <td>Open - please vote</td>
-          {% else %} 
-            <td>Closed - view results</td>
-          {%endif%}
-          <td>{{topic.id_owner}}</td>
-          <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
-          <td class="{{'hidden' if session['username'] != topic.id_owner}}">Reopen
-            Delete</td>
-        </tr>
-        <pre>{{ topic.id_topic | pprint }}</pre>
-        <pre>{{ topic.id_owner | pprint }}</pre>
-        <pre>{{ session['CURRENT_USER'] | pprint }}</pre>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</form>
+  <table class="table table-zebra w-full">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Owner</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for topic in table_topics %}
+      <tr>
+        <td>
+          <a href="{{ url_for('alabar.rating', topic_id = topic.id_topic) }}">{{ topic.title_topic}}</a>
+          <!-- <form action="{{ url_for('alabar.rating') }}" method="POST">
+            <input type="hidden" name="topic_id" value="{{topic.id_topic}}" />
+            <button type="submit">{{ topic.title_topic}}</button>
+          </form> -->
+        </td>
+        {% if topic.status == 1 %}
+        <td>Open - please vote</td>
+        {% else %}
+        <td>Closed - view results</td>
+        {%endif%}
+        <td>{{topic.id_owner}}</td>
+        <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
+        <td class="{{'hidden' if session['username'] != topic.id_owner}}">Reopen
+          Delete</td>
+      </tr>
+      <pre>{{ topic.id_topic | pprint }}</pre>
+      <pre>{{ topic.id_owner | pprint }}</pre>
+      <pre>{{ session['CURRENT_USER'] | pprint }}</pre>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-  {% endblock %}
+{% endblock %}

@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
 from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_owner, get_topics_by_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results
+from mockdata.mockdata import get_answers, get_average, show_result
 
 alabar_bp = Blueprint('alabar', __name__)
 
@@ -19,14 +20,20 @@ def index():
 @alabar_bp.route('/alabar/rating', methods=['GET', 'POST'])
 def rating():
     "recuperar topic por id para comprobar el estado y recuperar topic ticket para comprobar si el user ha completado el topic"
-    id_topic = 3
-    id_topic = request.form['topic_id']
-    id_topic = 3
+    # id_topic = request.form['topic_id']
+    # id_topic = 3
+    id_topic = request.args.get('topic_id')
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
+    answers = 0
+    average = 0
   
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket)
+    if topic.status == False:
+        #results = show_result()
+        answers = get_answers(1)
+        average = get_average(answers)
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, answers=answers, average=average)
 
 
 

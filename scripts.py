@@ -1,6 +1,7 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, delete, or_, select, update
 from alabar.models import Topic, Topic_ticket
+from mockdata.mockdata import get_average
 
 # Set up the database connection (NO ES IGUAL A FLASK. NO ESTAMOS EN UN PROCESO DE FLASK AHORA!!!!)
 engine = create_engine('sqlite:///./instance/alabar.db')
@@ -28,5 +29,5 @@ def get_topics_by_nuestro(user_id):
 
 if __name__ == '__main__':
     session = Session()
-    result = get_topics_by_nuestro('1')
-    print(result)
+    # result = get_topics_by_nuestro('1')
+    get_average(1)
