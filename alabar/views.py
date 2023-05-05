@@ -11,6 +11,7 @@ def index():
     #Se recuperan los topics de topic_ticket, topics que puede responder
     user = get_user_by_code(session['CURRENT_USER'])
     table_topics = get_topics_by_user(user.id_user)
+    #table_topics = get_topics_by_nuestro(user.id_user)
     #Se recuperan los topics en los que es administrador de la tabla Topic
     # table_topics_owner = get_topics_by_owner(user_id)
     # for i in table_topics_owner:
@@ -31,7 +32,7 @@ def rating():
 
     #1 = completed, 0 = not completed
     topic_ticket = Topic_ticket()
-    topic_ticket.completed = 0
+    topic_ticket.completed = 1
 
     return render_template('rating.html', topic=topic, topic_ticket=topic_ticket)
 

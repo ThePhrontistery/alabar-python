@@ -26,3 +26,9 @@ def get_topics_by_user(user_id):
 def get_topics_by_owner(user_id):
     #Select Topic by id_owner
     return db.session.execute(db.select(Topic).where(Topic.id_owner == user_id)).scalars().all()
+
+#def get_topics_by_nuestro(user_id):
+#    s = select([Topic]).where(Topic.date == '9999-12-31 00:00:00.000000' & Topic.id_owner = user_id or Topic.id_topic in select Topic_ticket.topic_id from Topic_ticket where Topic_ticket.user_id = user_id))
+#    result = db.execute(s)
+#    print(result)
+#    return result

@@ -14,7 +14,7 @@ VALUES
 (1, 'Marga Nacher','MNacher', 'marga@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
 (2, 'Gonzalo Pardo','GPardo', 'gonzalo@email.com', 's$$2b$12$6e2DSOJwq.Z/pz8LawWPH.5xl3RDDPuAFerF7Pi1SdOeeS.fy.Nmy', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
 (3, 'Jill Esteban','JEsteban', 'jill@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO',''),
-(3, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','');
+(4, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','');
 
 INSERT INTO "group"
 (id_group, name_group,id_owner)
@@ -59,6 +59,7 @@ VALUES
 (3, 2, 0),
 (1, 3, 0),
 (2, 4, 0);
+(3, 4, 0);
 
 
 INSERT INTO topic_item
