@@ -13,34 +13,60 @@
         <th>Status</th>
         <th>Owner</th>
         <th>Date</th>
+        <th></th><th></th>
       </tr>
     </thead>
     <tbody>
       {% for topic in table_topics %}
       <tr>
-        <td>
+        <td rowspan="2">
           <a href="{{ url_for('alabar.rating', topic_id = topic.id_topic) }}">{{ topic.title_topic}}</a>
           <!-- <form action="{{ url_for('alabar.rating') }}" method="POST">
             <input type="hidden" name="topic_id" value="{{topic.id_topic}}" />
             <button type="submit">{{ topic.title_topic}}</button>
           </form> -->
         </td>
-        {% if topic.status == 1 %}
-        <td>Open - please vote</td>
+        {% if topic.status == True %}
+        <td rowspan="2">Open - please vote</td>
         {% else %}
-        <td>Closed - view results</td>
+        <td rowspan="2">Closed - view results</td>
         {%endif%}
-        <td>{{topic.id_owner}}</td>
-        <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
-        <td class="{{'hidden' if session['username'] != topic.id_owner}}">Reopen
-          Delete</td>
+        <td rowspan="2">{{topic.id_owner}}</td>
+        <td rowspan="2" colspan="3">{{topic.start_date.strftime('%d-%m-%Y')}}</td>
+        {% if session['CURRENT_NAME'] == topic.id_owner %}
+          
+            <td colspan="2">
+              {% if topic.status == False %}
+              <a href="{{ url_for('alabar.reopen', topic_id = topic.id_topic) }}"> Reopen</a>
+              {% else %}
+              <a>Reopen</a>
+              {%endif%}
+            </td>
+      </tr>  
+      <tr>    
+            <td colspan="2">
+              <a href="{{ url_for('alabar.delete', topic_id = topic.id_topic) }}">Delete</a>
+            </td>
+      </tr>    
+        {% else %}
+        <td colspan="2"></td>
+      </tr>  
+      <tr>    
+            <td colspan="2"></td>
+      </tr>    
+
+        {%endif%}
+       <!--<td class="{{'hidden' if session['CURRENT_NAME'] != topic.id_owner}}">Reopen
+          Delete</td><-->
       </tr>
+      <!--<pre>{{ session['CURRENT_NAME'] | pprint}}</pre>
       <pre>{{ topic.id_topic | pprint }}</pre>
       <pre>{{ topic.id_owner | pprint }}</pre>
-      <pre>{{ session['CURRENT_USER'] | pprint }}</pre>
+      <pre>{{ session['CURRENT_USER'] | pprint }}</pre>-->
       {% endfor %}
     </tbody>
   </table>
 </div>
 
 {% endblock %}
+
