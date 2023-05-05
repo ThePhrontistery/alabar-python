@@ -19,10 +19,10 @@
       </thead>
       <tbody>
         {% for topic in table_topics %}
-        <input type="hidden" name="topic_id" value={{topic.id_topic}}>
+        <!--input type="hidden" name="topic_id" value={{topic.id_topic}}-->
         <tr>
           <td>
-              <input type="hidden" name="topic_id" value="{{ topic.id_topic }}">
+              <input type="hidden" name="topic_id" value="{{ topic.id_topic }}"/>
               <button type="submit">{{ topic.title_topic}}</button>
           </td>
           {% if topic.status == 1 %}
@@ -32,38 +32,13 @@
           {%endif%}
           <td>{{topic.id_owner}}</td>
           <td>{{topic.start_date.strftime('%d-%m-%Y')}}</td>
-          <td class="{{'hidden' if user_session != 'Marga Nacher'}}">Reopen
+          <td class="{{'hidden' if session['username'] != topic.id_owner}}">Reopen
             Delete</td>
         </tr>
+        <pre>{{ topic.id_topic | pprint }}</pre>
+        <pre>{{ topic.id_owner | pprint }}</pre>
+        <pre>{{ session['CURRENT_USER'] | pprint }}</pre>
         {% endfor %}
-        <!-- row 1 -->
-        <!-- <tr>
-          <td> ♠A of ♠ - Consum Sprint 17</td>
-          <td>Open - please vote</td>
-          <td>Marga Nacher</td>
-          <td>20-04-2023</td>
-        </tr>-->
-        <!-- row 2 -->
-        <!-- <tr>
-          <td>Rate Demo Sprint 16</td>
-          <td>Open - please vote</td>
-          <td>Marga Nacher</td>
-          <td>18-04-2023</td>
-        </tr>-->
-        <!-- row 3 -->
-        <!-- <tr>
-          <td>♠A of ♠ - Consum Sprint 16</td>
-          <td>Closed - view results</td>
-          <td>Marga Nacher</td>
-          <td>01-04--2023</td>
-        </tr>-->
-         <!-- row 4 -->
-         <!-- <tr>
-            <td>¿Cuándo vamos a la Oficina?</td>
-            <td>Closed - view results</td>
-            <td>Gonzalo Pardo</td>
-            <td>12-02-2023</td>
-          </tr>-->
       </tbody>
     </table>
   </div>
