@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
-from alabar.data import get_topics_by_user, get_user_by_name
+from alabar.data import get_topics_by_user, get_user_by_code, get_user_by_name
 from alabar.middleware import authenticate_handler
 from alabar.models import init_app
 from alabar.views import alabar_bp
@@ -28,16 +28,16 @@ def login():
     error = None
 
     if request.method == 'POST':
-        username = request.form['username']
+        user_code = request.form['user_code']
         password = request.form['password']
 
-        user = get_user_by_name(username)
+        user = get_user_by_code(user_code)
 
         if user is None or not user.check_password(password):
-            error = 'Invalid username or password'
+            error = 'Invalid user or password'
         else:
             # Note: Flask session. NOT SqlAlchemy...
-            session['CURRENT_USER'] = username
+            session['CURRENT_USER'] = user_code
             return redirect(url_for('alabar.index'))
  
     return render_template('login.html', error=error)
@@ -51,15 +51,6 @@ def logout():
 
 @app.route('/')
 def index():
-    #return "Hola mundo"
-    #return redirect(url_for('index'))
-    #return render_template('index.html')
-
-    #user_id = 1
-
-
-    #table_topics = get_topics_by_user(user_id)
-    #return render_template('index.html', table_topics=table_topics)
     return redirect(url_for('alabar.index'))
 
 @app.route('/page-not-found')
