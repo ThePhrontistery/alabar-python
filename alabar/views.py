@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_owner, get_topics_by_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results
-from mockdata.mockdata import get_answers, get_average, show_result
+from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results
+from mockdata.mockdata import show_result
 
 alabar_bp = Blueprint('alabar', __name__)
 
@@ -30,10 +30,9 @@ def rating():
     average = 0
   
     if topic.status == False:
-        #results = show_result()
-        answers = get_answers(1)
-        average = get_average(answers)
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, answers=answers, average=average)
+        results = show_result(id_topic)
+        
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
 
 
 
