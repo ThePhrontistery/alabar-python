@@ -8,18 +8,24 @@ from alabar.models import Topic_answer
 def show_result(id_topic):
     answers_text = get_answers_text()
     answers = get_topic_answers_by_topic_id(id_topic)
-    average = get_average(answers)
+    average = round(get_average(answers))
 
-    results = Stat(answers_text, answers, average)
+    # ESTO ES MUY FEO? HAY UNA MEJOR MANERA DE HACERLO?
+    #average_text = [answer_text for answer_text in answers_text if average == answer_text.order][0]
+    answers_text = get_answers_count(answers, answers_text)
+    average_text = answers_text[0]
+    for i in (answer_text for answer_text in answers_text if average == answer_text.order):
+        average_text = i
+        
+    results = Stat(answers_text, average_text)
     return results
 
-
 def get_answers_text():
-    a = Answer("😭", 1, "very sad")
-    b = Answer("🙁", 2, "sad")
-    c = Answer("😐", 3, "neutral")
-    d = Answer("😊", 4, "happy")
-    e = Answer("😃", 5, "very happy")
+    a = Answer("😭", 1, "very sad", 1)
+    b = Answer("🙁", 2, "sad", 2)
+    c = Answer("😐", 3, "neutral", 3)
+    d = Answer("😊", 4, "happy", 0)
+    e = Answer("😃", 5, "very happy", 0)
     answers = [a, b, c, d, e]
     return answers
 
@@ -38,6 +44,12 @@ def get_unique_answers(answers_list):
     x = np.array(answers_list)
     return np.unique(x).tolist()
 
+def get_answers_count(answers, answers_text):
+    for i in len(answers):
+        count = sum(elem.answer == i (elem) for elem in answers)
+    return answers_text
+
+
 
 
 @dataclass
@@ -45,10 +57,16 @@ class Answer:
     emoji: str
     order: int
     text: str
+    count: int
 
 @dataclass
 class Stat:
     answers_text: List[Answer]
-    answers: List[Topic_answer]
-    average: int
+    answer_text: Answer
+
+@dataclass
+class Topic_Answer_Mock:
+    id_topic_answer: int
+    id_topic: int
+    answer: str
 

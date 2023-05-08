@@ -4,6 +4,7 @@ from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get
 from mockdata.mockdata import show_result
 
 
+
 alabar_bp = Blueprint('alabar', __name__)
 
 
@@ -28,8 +29,7 @@ def rating():
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
-    answers = 0
-    average = 0
+    results = 0
   
     if topic.status == False:
         results = show_result(id_topic)
