@@ -40,6 +40,9 @@ def get_answer_by_id(id_topic):
     "Recuperamos todas las filas de la tabla topic_answer únicamente la columna answers para un id_topic"
     return db.session.execute(db.select(Topic_answer.answer).where(Topic_answer.id_topic==id_topic)).scalars().all()
 
+def get_topic_answers_by_topic_id(id_topic):
+    return db.session.execute(select(Topic_answer).where(Topic_answer.id_topic == id_topic)).scalars().all()
+
 def get_topics_by_user(user_id):
     "Get topic (must exist) associated users"
     topic_ticket = get_topics_ticket_by_user(user_id)
