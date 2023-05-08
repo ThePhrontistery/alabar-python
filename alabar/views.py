@@ -33,7 +33,7 @@ def rating():
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
     results = 0
-  
+    results = 0
     if topic.status == False:
         results = show_result(id_topic)
         
