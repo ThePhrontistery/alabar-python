@@ -130,19 +130,15 @@ def update_topic(topic):
                               .values(status=topic.status, participation= topic.participation))
 
 def topic_reopen(id_topic):
-    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
-    #try:
+    "Estando en pantalla de lista, pulsar el boton reopen"
     with transactional_session() as session:
-    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
        update_topic_reopen(get_topic_by_id(id_topic))
        result = True
        return result
     
 def topic_delete(id_topic):
-    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
-    #try:
+    "Estando en pantalla de lista, pulsar el boton delete"
     with transactional_session() as session:
-    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
        update_topic_delete(get_topic_by_id(id_topic))
        result = True
        return result
