@@ -1,6 +1,10 @@
+import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id,save_results, topic_delete, topic_reopen
-from mockdata.mockdata import get_answers, get_average
+
+from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, topic_delete, topic_reopen
+from mockdata.mockdata import show_result
+
+
 
 alabar_bp = Blueprint('alabar', __name__)
 
@@ -12,6 +16,8 @@ def index():
     #Se recuperan los topics de topic_ticket, topics que puede responder y topics que administra
     user = get_user_by_code(session['CURRENT_USER'])
     table_topics = get_topics_by_user_and_owner(user.id_user)
+    #if table_topics.end_date == datetime.date.today():
+
     # Reemplazo el contenido de id_owner por el name_user
     for table_topic in table_topics:
         table_topic.id_owner = get_user_by_id(table_topic.id_owner).name_user
@@ -26,14 +32,12 @@ def rating():
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
-    answers = 0
-    average = 0
-  
+    results = 0
+    results = 0
     if topic.status == False:
-        #results = show_result()
-        answers = get_answers(1)
-        average = get_average(answers)
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, answers=answers, average=average)
+        results = show_result(id_topic)
+        
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
 
 
 

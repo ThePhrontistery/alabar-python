@@ -70,6 +70,16 @@ VALUES
 (9, 4, 3, 'Una semana lu, mi, otra ma, jue'),
 (10, 4, 4, 'Me da igual');
 
+INSERT INTO topic_answer
+(id_topic_answer, id_topic, answer)
+VALUES
+(1, 3, '3'),
+(2, 3, '3'),
+(3, 3, '2'),
+(4, 3, '2'),
+(5, 1, '3');
+
+
 --INSERT INTO user_topic
 (--topic_id, user_id)
 --VALUES

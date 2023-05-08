@@ -40,6 +40,9 @@ def get_answer_by_id(id_topic):
     "Recuperamos todas las filas de la tabla topic_answer únicamente la columna answers para un id_topic"
     return db.session.execute(db.select(Topic_answer.answer).where(Topic_answer.id_topic==id_topic)).scalars().all()
 
+def get_topic_answers_by_topic_id(id_topic):
+    return db.session.execute(select(Topic_answer).where(Topic_answer.id_topic == id_topic)).scalars().all()
+
 def get_topics_by_user(user_id):
     "Get topic (must exist) associated users"
     topic_ticket = get_topics_ticket_by_user(user_id)
@@ -127,19 +130,15 @@ def update_topic(topic):
                               .values(status=topic.status, participation= topic.participation))
 
 def topic_reopen(id_topic):
-    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
-    #try:
+    "Estando en pantalla de lista, pulsar el boton reopen"
     with transactional_session() as session:
-    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
        update_topic_reopen(get_topic_by_id(id_topic))
        result = True
        return result
     
 def topic_delete(id_topic):
-    "Estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD"
-    #try:
+    "Estando en pantalla de lista, pulsar el boton delete"
     with transactional_session() as session:
-    #Metodo update_topic que actualiza en 'Topic' el campo 'participation' y 'status'
        update_topic_delete(get_topic_by_id(id_topic))
        result = True
        return result
