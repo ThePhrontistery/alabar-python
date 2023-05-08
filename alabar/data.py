@@ -1,7 +1,8 @@
 import datetime
+import numpy as np
 from sqlalchemy import or_
 from session_context import transactional_session
-from .models import Topic_answer, User, Group, Topic, Topic_item, Topic_ticket, db
+from .models import Answer, Stat, Topic_answer, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
 
@@ -157,3 +158,58 @@ def update_topic_delete(topic):
     topic.deleted_date = datetime.date.today()
     return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
                               .values(deleted_date= topic.deleted_date))
+
+def show_result(id_topic):
+    # Recuperamos lista de respuestas posibles:
+    possible_answers = get_possible_answers()
+    # recuperamos lista de respuestas dadas para un topic determinado de dos maneras:
+    #1: recuperamos toda la fila de la tabla topic answers y nos quedamos con el campo answer
+    # voted_answers_class = get_topic_answers_by_topic_id(id_topic)
+    # voted_answers = [int(answer.answer) for answer in voted_answers_class]
+    #2: recuperamos solo el campo answer directamente en la query:
+    voted_answers = [int(i) for i in get_answer_by_id(id_topic)]
+
+    #las posibles respuestas estan inicializadas con contador 0, contamos cuantas respuestas hay de cada posible respuesta:
+    possible_answers = update_answers_count(voted_answers, possible_answers)
+
+    #Recuperamos la respuesta media:
+    # ESTO ES MUY FEO? HAY UNA MEJOR MANERA DE HACERLO?
+    #possible_answers = [answer_text for answer_text in answers_text if average == answer_text.order][0]
+    # por defecto se muestra la primera respuesta posible (very sad):
+    average_answer = possible_answers[0]
+    average = round(get_average(voted_answers))
+    #dentro de las posibles respuestas, buscamos cual de ellas corresponde a la media
+    for i in (answer for answer in possible_answers if average == answer.order):
+        average_answer = i
+        
+    results = Stat(possible_answers, average_answer)
+    return results
+
+def get_possible_answers():
+    a = Answer("😭", 1, "very sad", 0)
+    b = Answer("🙁", 2, "sad", 0)
+    c = Answer("😐", 3, "neutral", 0)
+    d = Answer("😊", 4, "happy", 0)
+    e = Answer("😃", 5, "very happy", 0)
+    answers = [a, b, c, d, e]
+    return answers
+
+def get_average(voted_answers):
+    answers_count = len(voted_answers)
+    unique_answers_list = get_unique_answers(voted_answers)
+    answers_sum = 0
+    for voted_answer in unique_answers_list:
+        voted_answer_count = sum(map(lambda i: i == voted_answer, voted_answers))
+        answers_sum = answers_sum + voted_answer * voted_answer_count
+    average = answers_sum/answers_count
+    return average
+
+def get_unique_answers(voted_answers):
+    x = np.array(voted_answers)
+    return np.unique(x).tolist()
+
+def update_answers_count(voted_answers, possible_answers):
+    x = np.array(voted_answers)
+    for answer in possible_answers:
+        answer.count = (x == answer.order).sum()
+    return possible_answers
