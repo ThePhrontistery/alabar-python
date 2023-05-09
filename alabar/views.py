@@ -15,12 +15,14 @@ def index():
     #Se recuperan los topics de topic_ticket, topics que puede responder y topics que administra
     user = get_user_by_code(session['CURRENT_USER'])
     table_topics = get_topics_by_user_and_owner(user.id_user)
+    #current_date = datetime.date.today()
+    current_date = datetime.datetime.now()
     #if table_topics.end_date == datetime.date.today():
 
     # Reemplazo el contenido de id_owner por el name_user
     for table_topic in table_topics:
         table_topic.id_owner = get_user_by_id(table_topic.id_owner).name_user
-    return render_template('index.html', table_topics=table_topics)
+    return render_template('index.html', table_topics=table_topics,current_date=current_date)
 
 @alabar_bp.route('/alabar/rating', methods=['GET', 'POST'])
 def rating():
@@ -32,12 +34,14 @@ def rating():
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
-
+    current_date = datetime.datetime.now().date()
+    db_end_date = topic.end_date.date()
+    
     results = 0
-    if topic.status == False:
+    if topic.status == False or current_date >= db_end_date:
         results = show_result(id_topic)
 
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results, current_date=current_date, db_end_date=db_end_date)
 
 
 
