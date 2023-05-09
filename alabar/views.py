@@ -1,8 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, topic_delete, topic_reopen
-from mockdata.mockdata import show_result
+from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, show_result, topic_delete, topic_reopen
 
 
 
@@ -26,17 +25,18 @@ def index():
 @alabar_bp.route('/alabar/rating', methods=['GET', 'POST'])
 def rating():
     "recuperar topic por id para comprobar el estado y recuperar topic ticket para comprobar si el user ha completado el topic"
+    #TODO: ver porque no funciona el POST en el formulario, ahora estamos recuperando por url (posible problema de seguridad) 
     # id_topic = request.form['topic_id']
-    # id_topic = 3
+
     id_topic = request.args.get('topic_id')
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
-    results = 0
+
     results = 0
     if topic.status == False:
         results = show_result(id_topic)
-        
+
     return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
 
 

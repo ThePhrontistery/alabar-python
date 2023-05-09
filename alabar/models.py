@@ -1,4 +1,5 @@
-from typing import Self
+from dataclasses import dataclass
+from typing import List, Self
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
@@ -96,3 +97,14 @@ class Table:
     #selected_survey: int
     #survey_has_answers: int
     
+@dataclass
+class Answer:
+    emoji: str
+    order: int
+    text: str
+    count: int
+
+@dataclass
+class Stat:
+    answers: List[Answer]
+    average_answer: Answer
