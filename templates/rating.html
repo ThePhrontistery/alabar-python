@@ -6,10 +6,17 @@
 
 {% if topic.status == False %}
 <div class="grid grid-cols-2 gap-8">
+    {% if results.average_answer != 0 %}
     <div class="flex flex-col items-center">
         <span class="text-8xl">{{results.average_answer.emoji}}</span>
         <span class="text-lg mt-4">{{results.average_answer.text}}</span>
     </div>
+    {%else%}
+    <div class="flex flex-col items-center">
+        <span class="text-8xl"></span>
+        <span class="text-lg mt-4">No hay votos</span>
+    </div>
+    {%endif%}
     <div class="space-y-4">
         {% for answer in results.answers %}
         <div class="flex items-center">

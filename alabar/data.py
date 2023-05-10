@@ -176,8 +176,10 @@ def show_result(id_topic):
     # ESTO ES MUY FEO? HAY UNA MEJOR MANERA DE HACERLO?
     #possible_answers = [answer_text for answer_text in answers_text if average == answer_text.order][0]
     # por defecto se muestra la primera respuesta posible (very sad):
-    average_answer = possible_answers[0]
-    average = round(get_average(voted_answers))
+    average_answer = 0
+    average = 0
+    if voted_answers:
+        average = round(get_average(voted_answers))
     #dentro de las posibles respuestas, buscamos cual de ellas corresponde a la media
     for i in (answer for answer in possible_answers if average == answer.order):
         average_answer = i
