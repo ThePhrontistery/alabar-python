@@ -26,7 +26,9 @@
             <button type="submit">{{ topic.title_topic}}</button>
           </form> -->
         </td>
-        {% if topic.status == True %}
+        
+        
+        {% if topic.status == True and (current_date < topic.end_date) %}
         <td rowspan="2">Open - please vote</td>
         {% else %}
         <td rowspan="2">Closed - view results</td>
@@ -36,10 +38,14 @@
         {% if session['CURRENT_NAME'] == topic.id_owner %}
           
             <td colspan="2">
-              {% if topic.status == False %}
+              {% if topic.status == False and topic.participation < 100 and current_date < topic.end_date %} 
               <a href="{{ url_for('alabar.reopen', topic_id = topic.id_topic) }}"> Reopen</a>
-              {% else %}
-              <a>Reopen</a>
+              {% elif current_date > topic.end_date %}
+              <a onmouseover="alert('The end date has expired. The topic cannot be reopened.')">Reopen</a>
+              {% elif topic.participation == 100  %}
+              <a onmouseover="alert('Participation is 100%. The topic cannot be reopened')">Reopen</a>
+              {%else%}
+              <a> Reopen</a>              
               {%endif%}
             </td>
       </tr>  

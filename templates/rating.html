@@ -3,8 +3,7 @@
 {% block content %}
 
 <h1 class="text-xl font-bold">{{topic.title_topic}}</h1>
-
-{% if topic.status == False %}
+{% if topic.status == False or current_date >= db_end_date %}
 <div class="grid grid-cols-2 gap-8">
     {% if results.average_answer != 0 %}
     <div class="flex flex-col items-center">
