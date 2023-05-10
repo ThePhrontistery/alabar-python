@@ -5,7 +5,14 @@ from session_context import transactional_session
 from .models import Answer, Stat, Topic_answer, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
-
+typetopics = [
+    "MultipleChoiceTextTopic",
+    "MultipleChoiceImageTopic",
+    "SingleChoiceTextTopic",
+    "SingleChoiceImageTopic",
+    "♠A of ♠Topic",
+    "RatingTopic"
+]
 
 def get_topics_by_owner(user_id):
     #Select Topic by id_owner

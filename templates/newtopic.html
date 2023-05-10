@@ -1,0 +1,23 @@
+{% extends '/base.html' %}
+
+{% block content %}
+
+    <h1 class="text-grey-darkest">Create New Topic</h1>
+        <div class="flex mt-4">  
+            <form>   
+                <label>Introducir titulo del topic:</label>        
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="title_topic">           
+                <div class="form-group">
+                    <label for="topic-select">Choose Type Topic:</label>
+                    <select id="topic-select" hx-get="/tasks" hx-trigger="change" hx-target="#tasks-container" name="project_id" class="select select-bordered w-full max-w-xs">
+                      {% for typetopic in typetopics %}
+                      <option value="{{ typetopic.type_topic }}">{{ typetopic.type_topic }}</option>
+                      {% endfor %}
+                    </select>
+                </div>    
+                <button hx-post="{{ urlfor('save_topic') }}" hx-trigger="click" hx-target="#tasks-container" class="flex-no-shrink btn btn-sm">Grabar</button>    
+            </form>
+        </div>
+
+
+{% endblock %}
