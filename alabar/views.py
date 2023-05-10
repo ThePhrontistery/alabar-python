@@ -32,12 +32,14 @@ def rating():
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
+    current_date = datetime.datetime.now().date()
+    db_date_only = topic.end_date.date() 
 
     results = 0
     if topic.status == False:
         results = show_result(id_topic)
 
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results, current_date=current_date, db_date_only=db_date_only)
 
 
 
