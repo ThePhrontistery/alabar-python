@@ -5,7 +5,14 @@ from session_context import transactional_session
 from .models import Answer, Stat, Topic_answer, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
-
+typetopics = [
+    "MultipleChoiceTextTopic",
+    "MultipleChoiceImageTopic",
+    "SingleChoiceTextTopic",
+    "SingleChoiceImageTopic",
+    "♠A of ♠Topic",
+    "RatingTopic"
+]
 
 def get_topics_by_owner(user_id):
     #Select Topic by id_owner
@@ -215,3 +222,4 @@ def update_answers_count(voted_answers, possible_answers):
     for answer in possible_answers:
         answer.count = (x == answer.order).sum()
     return possible_answers
+#hola

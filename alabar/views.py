@@ -34,14 +34,12 @@ def rating():
     topic = get_topic_by_id(id_topic)
     user = get_user_by_code(session['CURRENT_USER'])
     topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
-    current_date = datetime.datetime.now().date()
-    db_end_date = topic.end_date.date()
-    
+
     results = 0
     if topic.status == False or current_date >= db_end_date:
         results = show_result(id_topic)
 
-    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results, current_date=current_date, db_end_date=db_end_date)
+    return render_template('rating.html', topic=topic, topic_ticket=topic_ticket, results=results)
 
 
 
@@ -78,6 +76,15 @@ def reopen():
 
 @alabar_bp.route('/alabar/delete', methods=['GET'])
 def delete():
+    id_topic = request.args.get('topic_id')
+    if topic_delete(id_topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
+
+@alabar_bp.route('/alabar/newtopic', methods=['GET'])
+def newtopic():
+    
     id_topic = request.args.get('topic_id')
     if topic_delete(id_topic):
         return redirect(url_for('alabar.index'))
