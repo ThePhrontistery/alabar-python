@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime
 from typing import List, Self
 import bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -108,3 +109,15 @@ class Answer:
 class Stat:
     answers: List[Answer]
     average_answer: Answer
+
+@dataclass
+class Topic_data:
+    #id_topic: int
+    title_topic: str
+    id_owner: int
+    type_topic: str
+    #start_date: datetime.datetime.now()
+    end_date: datetime.datetime
+    #status: True
+    #participation: 0
+    #deleted_date: datetime.datetime(9999, 12, 31)

@@ -222,3 +222,22 @@ def update_answers_count(voted_answers, possible_answers):
     for answer in possible_answers:
         answer.count = (x == answer.order).sum()
     return possible_answers
+
+def save_topic_results(topic):
+    "Estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD"
+    with transactional_session() as session:
+        #Metodo create_topic que inserta en 'Topic' cada topic (devuelve topic) pasando topic con los parametros
+        create_topic(topic)
+        #Metodo create_topic_item que inserta en 'Topic_item' 
+        #create_topic_item(???)
+        result = True
+        return result
+
+def create_topic(topic):
+    "Create record in topic"
+    #Creamos objeto topic de la clase Topic  pasando los campos por parametro para luego añadirlos a la tabla 
+    topic = Topic(title_topic=topic.title_topic, id_owner=topic.id_owner,type_topic=topic.type_topic,
+                  start_date=datetime.datetime.now(),end_date=topic.end_date,status=True,participation=0,
+                  deleted_date=datetime.datetime(9999, 12, 31))
+    return db.session.add(topic)
+
