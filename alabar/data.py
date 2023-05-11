@@ -222,4 +222,3 @@ def update_answers_count(voted_answers, possible_answers):
     for answer in possible_answers:
         answer.count = (x == answer.order).sum()
     return possible_answers
-#hola
