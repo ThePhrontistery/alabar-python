@@ -83,3 +83,12 @@ def delete():
         return redirect(url_for('alabar.index'))
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
+
+@alabar_bp.route('/alabar/newtopic', methods=['GET'])
+def newtopic():
+    
+    id_topic = request.args.get('topic_id')
+    if topic_delete(id_topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
