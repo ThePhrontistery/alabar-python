@@ -56,7 +56,7 @@ def index():
 
 @app.route('/newtopic', methods=['GET'])
 def newtopic():  
-    return redirect(url_for('newtopic'))
+    return redirect(url_for('alabar.newtopic'))
 
 @app.route('/page-not-found')
 def page_not_found():
