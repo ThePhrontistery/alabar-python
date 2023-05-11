@@ -1,7 +1,8 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, show_result, topic_delete, topic_reopen, typetopics
+from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_topic_results, show_result, topic_delete, topic_reopen, typetopics
+from alabar.models import Topic_data
 
 
 
@@ -84,8 +85,28 @@ def delete():
 
 @alabar_bp.route('/alabar/newtopic', methods=['GET'])
 def newtopic():
+    """Pasar a la plantilla de newtopic.html los tipos de topic""" 
     return render_template('newtopic.html', typetopics=typetopics)
 
 @alabar_bp.route('/alabar/save_topic', methods=['POST'])
 def save_topic():
-    return redirect(url_for('alabar.index'))
+    """Actualizacion en BBDD los resultados de salvar el topic""" 
+    #1.1 Obtenemos datos de pantalla con request.form (titulo,fecha fin,tytopic seleccionado)
+    title_topic = request.form['title_topic']
+    # end_date recuperada del formulario es tipo str y tiene formato AAAA-MM-DDTHH:MM:SS.
+    # hay que convertirlo a objeto datetime.datetime (con strptime) y a formato AAAA-MM-DD HH:MM:SS
+    end_date= datetime.datetime.strptime(request.form['end_date'], "%Y-%m-%dT%H:%M")
+    typetopic = request.form['typetopic']
+    #1.2 del user_code conectado recuperamos su id.user
+    user = get_user_by_code(session['CURRENT_USER'])
+    #1.3 Creamos objeto topic de la clase Topic_data para pasar todos los parametros que necesita para crear topic
+    topic = Topic_data(title_topic=title_topic,id_owner=user.id_user,type_topic=typetopic,
+                       end_date=end_date)
+    #1.4 save_topic_results (estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD) -> True o False 
+    # Tiene los metodos 'create_topic' y  'create_topic_item'
+    # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
+    if save_topic_results(topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+
