@@ -85,3 +85,7 @@ def delete():
 @alabar_bp.route('/alabar/newtopic', methods=['GET'])
 def newtopic():
     return render_template('newtopic.html', typetopics=typetopics)
+
+@alabar_bp.route('/alabar/save_topic', methods=['POST'])
+def save_topic():
+    return redirect(url_for('alabar.index'))
