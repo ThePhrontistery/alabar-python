@@ -2,7 +2,7 @@ import datetime
 import numpy as np
 from sqlalchemy import or_
 from session_context import transactional_session
-from .models import Answer, Stat, Topic_answer, User, Topic, Topic_ticket, db
+from .models import Answer, Stat, Topic_answer, Topic_data, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
 typetopics = [
@@ -227,11 +227,11 @@ def save_topic_results(topic):
     "Estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD"
     with transactional_session() as session:
         #Metodo create_topic que inserta en 'Topic' cada topic (devuelve topic) pasando topic con los parametros
-        create_topic(topic)
+        topic = create_topic(topic)
         #Metodo create_topic_item que inserta en 'Topic_item' 
         #create_topic_item(???)
         result = True
-        return result
+        return topic
 
 def create_topic(topic):
     "Create record in topic"
@@ -242,5 +242,6 @@ def create_topic(topic):
     new_topic = db.session.add(topic)
     print (new_topic)
     print(topic)
-    return new_topic
+    return Topic_data(title_topic=topic.title_topic,id_owner=topic.id_owner,type_topic=topic.type_topic,
+                       end_date=topic.end_date)
 
