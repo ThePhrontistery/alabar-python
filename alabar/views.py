@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import get_topic_by_id, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_topic_results, show_result, topic_delete, topic_reopen, typetopics
+from alabar.data import get_id_topic_by_data, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_topic_results, show_result, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic_data
 
 
@@ -103,21 +103,42 @@ def save_topic():
     #1.2 del user_code conectado recuperamos su id.user
     user = get_user_by_code(session['CURRENT_USER'])
     #1.3 Creamos objeto topic de la clase Topic_data para pasar todos los parametros que necesita para crear topic
-    topic = Topic_data(title_topic=title_topic,id_owner=user.id_user,type_topic=typetopic,
+    topic_data = Topic_data(title_topic=title_topic,id_owner=user.id_user,type_topic=typetopic,
                        end_date=end_date)
     #1.4 save_topic_results (estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD) -> True o False 
     # Tiene los metodos 'create_topic' y  'create_topic_item'
     # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
-    topic = save_topic_results(topic)
-    if save_topic_results(topic):
-    #    if typetopic == 'RatingTopic':
-        return redirect(url_for('alabar.index'))
-    #    else:
-    #       return redirect(url_for('alabar.newtopicitem')) 
+    topic_select = save_topic_results(topic_data)
+    if topic_select:
+        topic = get_id_topic_by_data(topic_select)
+        if typetopic == 'RatingTopic':
+           return redirect(url_for('alabar.index'))
+        else:
+           #return redirect(url_for('alabar.newtopicitem',id_topic=topic.id_topic))
+           return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
-@alabar_bp.route('/alabar/newtopicitem', methods=['GET'])
-def newtopicitem():
-    """Pasar a la plantilla de newtopicitem.html los tipos de topic""" 
-    return render_template('newtopicitem.html', )
+#@alabar_bp.route('/alabar/newtopicitem', methods=['GET'])
+#def newtopicitem():
+#    """Pasar a la plantilla de newtopicitem.html los tipos de topic""" 
+#    return render_template('newtopicitem.html', id_topic )
+
+@alabar_bp.route('/alabar/add_item', methods=['POST'])
+def add_item():
+    """Actualizacion en BBDD los resultados del topic_item""" 
+    #1.1 Obtenemos datos de pantalla con request.form (topic_id y radio -rating-)
+    id_topic = request.form['id_topic']
+    text_answers = request.form['text_answers']
+    
+    #1.2 Calculo de id_order 
+    get_topic_item_by_id_topic(id_topic)
+    
+    
+    #1.3 save_results (estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD) -> True o False 
+    # Tiene los metodos 'create_answer', 'update_ticket' y 'update_topic'
+    # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
+    #if save_results(id_topic,answer, session['CURRENT_USER']):
+    #    return redirect(url_for('alabar.index'))
+    #else:
+    #    return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
