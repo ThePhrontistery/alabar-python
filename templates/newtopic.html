@@ -1,15 +1,17 @@
 {% extends '/base.html' %}
 {% block content %}
 
-<h1 class="text-grey-darkest">Create New Topic</h1>
+<h1 class="text-xl font-bold">Create New Topic</h1>
 
 <div class="flex mt-4">
 
     <form action="{{ url_for('alabar.save_topic') }}" method="POST">
         <label>Introducir titulo del topic:</label>
         <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="title_topic" required>
+        <br> </br>
         <label for="datetime">Introducir fecha de fin del topic:</label>
         <input type="datetime-local" id="datetime" name="end_date" value="{{ selected_datetime }}">
+        <br> </br>
         <div class="form-group">
             <label for="topic-select">Choose Type Topic:</label>
             <select id="topic-select" name="typetopic" class="select select-primary w-full max-w-xs" required>
@@ -18,7 +20,9 @@
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <br> </br>
+        <button type="submit" class="btn btn-outline btn btn-primary">Save</button>
+        <button type="button" class="btn btn-outline btn btn-primary"><a href="/" class="btn btn-sm btn-ghost">Cancel</a></button>
     </form>
 </div>
 
