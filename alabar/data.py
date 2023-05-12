@@ -195,11 +195,11 @@ def show_result(id_topic):
     return results
 
 def get_possible_answers():
-    a = Answer("😭", 1, "very sad", 0)
-    b = Answer("🙁", 2, "sad", 0)
-    c = Answer("😐", 3, "neutral", 0)
-    d = Answer("😊", 4, "happy", 0)
-    e = Answer("😃", 5, "very happy", 0)
+    a = Answer("😭", 1, "Sad", 0)
+    b = Answer("🙁", 2, "Dissapointed", 0)
+    c = Answer("😐", 3, "Neutral", 0)
+    d = Answer("😊", 4, "Contented", 0)
+    e = Answer("😃", 5, "Happy", 0)
     answers = [a, b, c, d, e]
     return answers
 
@@ -239,5 +239,8 @@ def create_topic(topic):
     topic = Topic(title_topic=topic.title_topic, id_owner=topic.id_owner,type_topic=topic.type_topic,
                   start_date=datetime.datetime.now(),end_date=topic.end_date,status=True,participation=0,
                   deleted_date=datetime.datetime(9999, 12, 31))
-    return db.session.add(topic)
+    new_topic = db.session.add(topic)
+    print (new_topic)
+    print(topic)
+    return new_topic
 

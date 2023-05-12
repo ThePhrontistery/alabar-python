@@ -98,7 +98,7 @@ def save_topic():
     if request.form['end_date']:
        end_date= datetime.datetime.strptime(request.form['end_date'], "%Y-%m-%dT%H:%M")
     else:
-       end_date = datetime.datetime.strptime('9999-12-31 23:59:59', "%Y-%m-%d %H:%M:%S")
+       end_date = datetime.datetime.strptime('9999-12-31 00:00:00', "%Y-%m-%d %H:%M:%S")
     typetopic = request.form['typetopic']
     #1.2 del user_code conectado recuperamos su id.user
     user = get_user_by_code(session['CURRENT_USER'])
@@ -109,7 +109,14 @@ def save_topic():
     # Tiene los metodos 'create_topic' y  'create_topic_item'
     # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
     if save_topic_results(topic):
+    #    if typetopic == 'RatingTopic':
         return redirect(url_for('alabar.index'))
+    #    else:
+    #       return redirect(url_for('alabar.newtopicitem')) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
+@alabar_bp.route('/alabar/newtopicitem', methods=['GET'])
+def newtopicitem():
+    """Pasar a la plantilla de newtopicitem.html los tipos de topic""" 
+    return render_template('newtopicitem.html', )
