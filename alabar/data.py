@@ -2,7 +2,7 @@ import datetime
 import numpy as np
 from sqlalchemy import or_
 from session_context import transactional_session
-from .models import Answer, Stat, Topic_answer, Topic_data, User, Topic, Topic_ticket, db
+from .models import Answer, Stat, Topic_answer, Topic_data, Topic_item, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
 typetopics = [
@@ -223,25 +223,41 @@ def update_answers_count(voted_answers, possible_answers):
         answer.count = (x == answer.order).sum()
     return possible_answers
 
-def save_topic_results(topic):
+def save_topic_results(topic_data):
     "Estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD"
     with transactional_session() as session:
         #Metodo create_topic que inserta en 'Topic' cada topic (devuelve topic) pasando topic con los parametros
-        topic = create_topic(topic)
+        topic_select = create_topic(topic_data)
         #Metodo create_topic_item que inserta en 'Topic_item' 
         #create_topic_item(???)
         result = True
-        return topic
+        return topic_select
+        #return last_id
 
-def create_topic(topic):
+def create_topic(topic_data):
     "Create record in topic"
     #Creamos objeto topic de la clase Topic  pasando los campos por parametro para luego añadirlos a la tabla 
-    topic = Topic(title_topic=topic.title_topic, id_owner=topic.id_owner,type_topic=topic.type_topic,
-                  start_date=datetime.datetime.now(),end_date=topic.end_date,status=True,participation=0,
+    topic_new = Topic(title_topic=topic_data.title_topic, id_owner=topic_data.id_owner,type_topic=topic_data.type_topic,
+                  start_date=datetime.datetime.now(),end_date=topic_data.end_date,status=True,participation=0,
                   deleted_date=datetime.datetime(9999, 12, 31))
-    new_topic = db.session.add(topic)
-    print (new_topic)
-    print(topic)
-    return Topic_data(title_topic=topic.title_topic,id_owner=topic.id_owner,type_topic=topic.type_topic,
-                       end_date=topic.end_date)
+    db.session.add(topic_new)
+         
+    return Topic_data(title_topic=topic_data.title_topic,id_owner=topic_data.id_owner,type_topic=topic_data.type_topic,
+                       end_date=topic_data.end_date)
 
+def get_id_topic_by_data(topic_select):
+    "Select tabla Topic by data (campos de pantalla), para recuperar el topic creado (campo id_topic)"
+    return db.session.execute(db.select(Topic)
+                              .where(Topic.title_topic == topic_select.title_topic)
+                              .where(Topic.id_owner == topic_select.id_owner)
+                              .where(Topic.type_topic == topic_select.type_topic)
+                              .where(Topic.end_date == topic_select.end_date)).scalar_one_or_none()
+                                                            
+
+def get_topic_item_by_id_topic(id_topic):
+    "Select tabla Topic_item by id_topic, para recuperar el id order)"
+    return db.session.execute(db.select(max(Topic_item.id_order))
+           .where(Topic_item.id_topic == id_topic)).scalar()
+                              
+                              
+                                                            
