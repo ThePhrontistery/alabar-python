@@ -108,6 +108,7 @@ def save_topic():
     #1.4 save_topic_results (estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD) -> True o False 
     # Tiene los metodos 'create_topic' y  'create_topic_item'
     # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
+    topic = save_topic_results(topic)
     if save_topic_results(topic):
     #    if typetopic == 'RatingTopic':
         return redirect(url_for('alabar.index'))
