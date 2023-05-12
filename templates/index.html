@@ -12,7 +12,7 @@
         <th>Title</th>
         <th>Status</th>
         <th>Owner</th>
-        <th>Date</th>
+        <th>End Date</th>
         <th></th><th></th>
       </tr>
     </thead>
@@ -34,7 +34,7 @@
         <td rowspan="2">Closed - view results</td>
         {%endif%}
         <td rowspan="2">{{topic.id_owner}}</td>
-        <td rowspan="2" colspan="3">{{topic.start_date.strftime('%d-%m-%Y')}}</td>
+        <td rowspan="2" colspan="3">{{topic.end_date.strftime('%d-%m-%Y')}}</td>
         {% if session['CURRENT_NAME'] == topic.id_owner %}
           
             <td colspan="2">

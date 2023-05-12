@@ -95,7 +95,10 @@ def save_topic():
     title_topic = request.form['title_topic']
     # end_date recuperada del formulario es tipo str y tiene formato AAAA-MM-DDTHH:MM:SS.
     # hay que convertirlo a objeto datetime.datetime (con strptime) y a formato AAAA-MM-DD HH:MM:SS
-    end_date= datetime.datetime.strptime(request.form['end_date'], "%Y-%m-%dT%H:%M")
+    if request.form['end_date']:
+       end_date= datetime.datetime.strptime(request.form['end_date'], "%Y-%m-%dT%H:%M")
+    else:
+       end_date = datetime.datetime.strptime('9999-12-31 23:59:59', "%Y-%m-%d %H:%M:%S")
     typetopic = request.form['typetopic']
     #1.2 del user_code conectado recuperamos su id.user
     user = get_user_by_code(session['CURRENT_USER'])
