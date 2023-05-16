@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import get_id_topic_by_data, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_topic_results, show_result, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic_data
 
 
@@ -127,18 +127,54 @@ def save_topic():
 @alabar_bp.route('/alabar/add_item', methods=['POST'])
 def add_item():
     """Actualizacion en BBDD los resultados del topic_item""" 
-    #1.1 Obtenemos datos de pantalla con request.form (topic_id y radio -rating-)
+    #1.1 Obtenemos datos de pantalla con request.form (id_topic y el item añadido)
     id_topic = request.form['id_topic']
     text_answers = request.form['text_answers']
     
     #1.2 Calculo de id_order 
-    get_topic_item_by_id_topic(id_topic)
-    
-    
-    #1.3 save_results (estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD) -> True o False 
-    # Tiene los metodos 'create_answer', 'update_ticket' y 'update_topic'
-    # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
-    #if save_results(id_topic,answer, session['CURRENT_USER']):
-    #    return redirect(url_for('alabar.index'))
-    #else:
-    #    return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+    # Select tabla Topic_item by id_topic, para recuperar el id order maximo para cada id_topic
+    id_order_max = get_max_id_order_in_topic_item(int(id_topic))
+    # Si no devuelve nada, es que no existe ningun item en topic_item, será el primero
+    if id_order_max == None:
+         id_order = 1
+    else:
+         id_order = id_order_max + 1
+
+    #1.3 save_results_item (al dar al botón SAVE se graba en BBDD de topic_item) -> True o False 
+    # Tiene el metodo 'create_topic_item'
+    # Si ha grabado bien, actualiza la lista de topic_item para el id_topic
+    if save_results_item(id_topic, id_order,text_answers):
+        #return redirect(url_for('alabar.index'))
+        #return render_template('newtopicitem.html', id_topic=id_topic )
+        #return redirect(url_for('alabar.items'))
+        #return redirect(url_for('alabar.render_items'))
+        return render_items(id_topic)
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+
+
+#@alabar_bp.route('/alabar/items', methods=['POST'])
+#def items():
+    #"""Metodo que muestra los topic_item de un id_topic""" 
+    # Obtenemos datos de pantalla con request.form (id_topic)
+    #id_topic = request.form['id_topic']
+    # Metodo que presenta la lista de topic_item actualizada com template
+    #return render_items(id_topic)
+
+def render_items(id_topic):
+    """Metodo que presenta la lista de topic_item actualizada con template""" 
+    #Select tabla Topic_item by id_topic, para recuperar todos los topic_item
+    items = get_topic_item_by_id_topic(id_topic)
+    return render_template('items.html', items=items)
+
+@alabar_bp.route('/alabar/delete_item', methods=['POST'])
+def delete_item():
+    """Actualizacion en BBDD (topic_item) al dar al botón borrar el item introducido""" 
+    id_topic_item = int(request.form['id_topic_item'])
+    # Select tabla Topic_item by id_topic_item, para recuperar el registro entero a borrar
+    topic_item = find_item_by_id_topic_item(id_topic_item)
+    # Para volver a presentar los topic_item del id_topic necesitamos tenerlo (para el render_item)
+    id_topic = topic_item.id_topic
+    # Accion de borrado del registro de topic_item
+    delete_topic_item(topic_item)
+    return render_items(id_topic)

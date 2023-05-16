@@ -1,6 +1,6 @@
 import datetime
 import numpy as np
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 from session_context import transactional_session
 from .models import Answer, Stat, Topic_answer, Topic_data, Topic_item, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
@@ -254,10 +254,42 @@ def get_id_topic_by_data(topic_select):
                               .where(Topic.end_date == topic_select.end_date)).scalar_one_or_none()
                                                             
 
+def get_max_id_order_in_topic_item(id_topic):
+    "Select tabla Topic_item by id_topic, para recuperar el id order maximo para cada id_topic"
+    #return db.session.execute(db.select([db.func.max(Topic_item.id_order)])
+    #  .where(Topic_item.id_topic == id_topic)).scalar()
+    return db.session.query(func.max(Topic_item.id_order)
+           .filter(Topic_item.id_topic == id_topic)).scalar()
+
+def save_results_item(id_topic, id_order,text_answers):
+    "Estando en pantalla NEW TOPIC,al dar al botón SAVE se graba en BBDD"
+    with transactional_session() as session:
+        #Metodo create_topic_item que inserta en 'Topic_item' cada item (devuelve item) 
+        create_topic_item(id_topic, id_order,text_answers)
+        result = True
+        return result
+    
+def create_topic_item(id_topic, id_order,text_answers):
+    "Create record in topic_item"
+    #Creamos objeto topic_item de la clase Topic_item pasando los campos por parametro para luego añadirlos a la tabla 
+    item = Topic_item(id_topic=id_topic, id_order=id_order,text_answers=text_answers)
+    return db.session.add(item)                      
+                              
+
 def get_topic_item_by_id_topic(id_topic):
-    "Select tabla Topic_item by id_topic, para recuperar el id order)"
-    return db.session.execute(db.select(max(Topic_item.id_order))
-           .where(Topic_item.id_topic == id_topic)).scalar()
-                              
-                              
-                                                            
+    "Select tabla Topic_item by id_topic, para recuperar todos los topic_item"
+    return db.session.execute(db.select(Topic_item)
+                              .where(Topic_item.id_topic == id_topic)).scalars().all()
+                          
+
+def find_item_by_id_topic_item(id_topic_item):
+    "Select tabla Topic_item by id_topic_item, para recuperar el registro entero a borrar"
+    topic_item = db.session.execute(
+        db.select(Topic_item).filter_by(id_topic_item=id_topic_item)).scalar_one()
+    return topic_item
+
+def delete_topic_item(topic_item):
+    "Accion de borrado del registro de topic_item"
+    with transactional_session() as session:
+        session.delete(topic_item)
+       
