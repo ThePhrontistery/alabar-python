@@ -20,11 +20,22 @@
       {% for topic in table_topics %}
       <tr>
         <td rowspan="2">
-          <a href="{{ url_for('alabar.rating', topic_id = topic.id_topic) }}">{{ topic.title_topic}}</a>
-          <!-- <form action="{{ url_for('alabar.rating') }}" method="POST">
-            <input type="hidden" name="topic_id" value="{{topic.id_topic}}" />
-            <button type="submit">{{ topic.title_topic}}</button>
-          </form> -->
+          {% if topic.type_topic == 'MultipleChoiceTextTopic' %}            
+            <a href="{{ url_for('alabar.multiple_choice_text', topic_id = topic.id_topic) }}">{{topic.title_topic}}</a>            
+          {% elif topic.type_topic == 'MultipleChoiceImageTopic' %}
+            <a>{{topic.title_topic}}</a>
+          {% elif topic.type_topic == 'SingleChoiceTextTopic' %}
+            <a>{{topic.title_topic}}</a>    
+          {% elif topic.type_topic == 'SingleChoiceImageTopic' %}
+            <a>{{topic.title_topic}}</a>
+          {% elif topic.type_topic == '♠A of ♠Topic' %}
+            <a>{{topic.title_topic}}</a>            
+          {% elif topic.type_topic == 'RatingTopic' %}
+            <a href="{{ url_for('alabar.rating', topic_id = topic.id_topic) }}">{{topic.title_topic}}</a>
+          {% else %}
+            No se entiende el tipo de topic.
+          {% endif %}
+          
         </td>
         
         
