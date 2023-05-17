@@ -166,3 +166,49 @@ def delete_item():
     # Accion de borrado del registro de topic_item
     delete_topic_item(topic_item)
     return render_items(id_topic)
+
+
+@alabar_bp.route('/alabar/multiple_choice_text', methods=['GET', 'POST'])
+def multiple_choice_text():
+    "recuperar topic por id para comprobar el estado y recuperar topic ticket para comprobar si el user ha completado el topic y recuperar topic_item"
+    
+    id_topic = request.args.get('topic_id')
+    #Se recupera un objeto Topic por id_topic
+    topic = get_topic_by_id(id_topic)
+    #Se recupera el objeto de tipo User, lo necesitamos para acceder a topic_ticket
+    user = get_user_by_code(session['CURRENT_USER'])
+    #Se accede a topic_ticket para saber si ha contestado al topic
+    topic_ticket = get_topic_ticket_by_topic_and_user(id_topic, user.id_user)
+    current_date = datetime.datetime.now().date()
+    db_end_date = topic.end_date.date()
+
+    #Se accede a topic_item para recuperar las respuestas que se muestran en pantalla
+    topic_item = get_topic_item_by_id_topic(id_topic)
+
+    results = 0
+    if topic.status == False or current_date >= db_end_date:
+        results = show_result(id_topic)
+
+    return render_template('MultipleChoiceText.html', topic=topic, topic_ticket=topic_ticket, results=results, current_date=current_date, db_end_date=db_end_date, topic_items=topic_item)
+
+@alabar_bp.route('/alabar/mct_results', methods=['POST'])
+def mct_results():
+    """Actualizacion en BBDD los resultados del topic multiple choice text""" 
+    #1.1 Obtenemos datos de pantalla con request.form (topic_id y radio -rating-)
+    id_topic = request.form['topic_id']
+    rating = request.form['item-0']
+
+    #1.2 Creamos answers como un diccionario con clave de 1 a 5 (para cada emoticono) y asignando valor 1 al que tenga valor
+    # en lo recibido en rating (value de 'radio')
+    #answers = {'1':0, '2':0, '3':0, '4':0, '5':0}
+    #if rating in answers:
+    #    answers[rating] = 1 
+    answer = rating
+    
+    #1.3 save_results (estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD) -> True o False 
+    # Tiene los metodos 'create_answer', 'update_ticket' y 'update_topic'
+    # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada
+    if save_results(id_topic,answer, session['CURRENT_USER']):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
