@@ -4,7 +4,7 @@
   <p class="w-full text-grey-darkest">{{ item.text_answers}}</p>
   <form class="flex">
       <input type="hidden" value="{{item.id_topic_item}}" name="id_topic_item"></input>
-      <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-xs btn-secondary">Borrar</a>
+      <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete item</a>
   </form>
   </div>
 {% endfor %}

@@ -1,29 +1,59 @@
 {% extends '/base.html' %}
 {% block content %}
 
-<h1 class="text-xl font-bold">Create New Topic</h1>
+{% if topic.id_topic is none %} <!--Si entra a crear el topic (el id no existe)-->
+    <h1 class="text-xl font-bold">Create New Topic</h1>
 
-<div class="flex mt-4">
+    <div class="flex mt-4">
 
-    <form action="{{ url_for('alabar.save_topic') }}" method="POST">
-        <label>Introducir titulo del topic:</label>
-        <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="title_topic" required>
-        <br> </br>
-        <label for="datetime">Introducir fecha de fin del topic:</label>
-        <input type="datetime-local" id="datetime" name="end_date" value="{{ selected_datetime }}">
-        <br> </br>
-        <div class="form-group">
-            <label for="topic-select">Choose Type Topic:</label>
-            <select id="topic-select" name="typetopic" class="select select-primary w-full max-w-xs" required>
-                {% for typetopic in typetopics %}
-                <option value="{{typetopic}}">{{typetopic}}</option>
-                {% endfor %}
-            </select>
+        <form action="{{ url_for('alabar.save_topic') }}" method="POST">
+            <label>Introducir titulo del topic:</label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="title_topic" required>
+            <br> </br>
+            <label for="datetime">Introducir fecha de fin del topic:</label>
+            <input type="datetime-local" id="datetime" name="end_date" value="{{ selected_datetime }}">
+            <br> </br>
+            <div class="form-group">
+                <label for="topic-select">Choose Type Topic:</label>
+                <select id="topic-select" name="typetopic" class="select select-primary w-full max-w-xs" required>
+                    {% for typetopic in typetopics %}
+                    <option value="{{typetopic}}">{{typetopic}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <br> </br>
+            <button type="submit" class="btn btn-outline btn btn-primary">Save</button>
+            <button type="button" class="btn btn-outline btn btn-primary"><a href="/" class="btn btn-sm btn-ghost">Cancel</a></button>
+        </form>
+
+    </div>
+{%else%} <!--Si el topic ya se ha salvado (existe id_topic), presentamos datos y creamos topic_item-->
+    <div >
+        <h1 class="text-xl font-bold">Topic data</h1>
+        <div >
+            <form>
+                <div >
+                    <label>Titulo del topic: </label> 
+                    <label class="bg-white shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.title_topic}}</label>
+                    <br> </br>
+                    <label>Fecha de fin del topic: </label>
+                    <label class="bg-white shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.end_date}}</label>
+                    <br> </br>
+                    <label>Type Topic: </label>
+                    <label class="bg-white shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.type_topic}}</label>
+                    <br> </br>
+                </div>
+                <h1 class="text-xl font-bold">Create Items for Topic</h1>
+                <input type="hidden" name="id_topic" value={{topic.id_topic}}>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
+                <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Add</button>
+            </form>
         </div>
         <br> </br>
-        <button type="submit" class="btn btn-outline btn btn-primary">Save</button>
-        <button type="button" class="btn btn-outline btn btn-primary"><a href="/" class="btn btn-sm btn-ghost">Cancel</a></button>
-    </form>
-</div>
+        <div id="items-container">
+        {% include 'items.html' %}
+        </div>
+    </div>
+{%endif%}
 
 {% endblock %}
