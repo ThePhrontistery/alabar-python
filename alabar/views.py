@@ -2,7 +2,7 @@ import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
 from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
-from alabar.models import Topic_data
+from alabar.models import Topic, Topic_data
 
 
 
@@ -86,7 +86,10 @@ def delete():
 @alabar_bp.route('/alabar/newtopic', methods=['GET'])
 def newtopic():
     """Pasar a la plantilla de newtopic.html los tipos de topic""" 
-    return render_template('newtopic.html', typetopics=typetopics)
+    # Creamos objeto topic de la clase Topic, inicializado 
+    topic = Topic()
+    # La primera vez que va al html el topic no esta creado (entra en la primera parte)
+    return render_template('newtopic.html', typetopics=typetopics,topic=topic)
 
 @alabar_bp.route('/alabar/save_topic', methods=['POST'])
 def save_topic():
@@ -114,15 +117,12 @@ def save_topic():
         if typetopic == 'RatingTopic':
            return redirect(url_for('alabar.index'))
         else:
-           #return redirect(url_for('alabar.newtopicitem',id_topic=topic.id_topic))
-           return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
+           #return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
+           # Si ya se ha creado el topic, vamos al html a la segunda parte (crear topic_item)
+           return render_template('newtopic.html',typetopics=typetopics,topic=topic) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
-#@alabar_bp.route('/alabar/newtopicitem', methods=['GET'])
-#def newtopicitem():
-#    """Pasar a la plantilla de newtopicitem.html los tipos de topic""" 
-#    return render_template('newtopicitem.html', id_topic )
 
 @alabar_bp.route('/alabar/add_item', methods=['POST'])
 def add_item():
@@ -144,22 +144,10 @@ def add_item():
     # Tiene el metodo 'create_topic_item'
     # Si ha grabado bien, actualiza la lista de topic_item para el id_topic
     if save_results_item(id_topic, id_order,text_answers):
-        #return redirect(url_for('alabar.index'))
-        #return render_template('newtopicitem.html', id_topic=id_topic )
-        #return redirect(url_for('alabar.items'))
-        #return redirect(url_for('alabar.render_items'))
         return render_items(id_topic)
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
-
-#@alabar_bp.route('/alabar/items', methods=['POST'])
-#def items():
-    #"""Metodo que muestra los topic_item de un id_topic""" 
-    # Obtenemos datos de pantalla con request.form (id_topic)
-    #id_topic = request.form['id_topic']
-    # Metodo que presenta la lista de topic_item actualizada com template
-    #return render_items(id_topic)
 
 def render_items(id_topic):
     """Metodo que presenta la lista de topic_item actualizada con template""" 

@@ -5,6 +5,7 @@
   <h1 class="text-xl font-bold">Create Items for Topic</h1>
   <div >
     <form>
+      <label>Titulo del topic: {{topic.title_topic}}</label>
       <input type="hidden" name="id_topic" value={{id_topic}}>
       <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Añadir Respuestas">
       <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Añadir</button>
