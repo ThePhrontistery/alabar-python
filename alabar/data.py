@@ -293,3 +293,14 @@ def delete_topic_item(topic_item):
     with transactional_session() as session:
         session.delete(topic_item)
        
+def show_result_multiple(id_topic):
+    # Recuperamos lista de respuestas posibles:
+    # Haremos un acceso a BBDD Topic_item by id para recuperar todos los items de ese id que serán las posibles respuestas
+    text_answers = get_topic_item_by_id_topic(id_topic).text_answers
+    # recuperamos lista de respuestas dadas para un topic determinado de dos maneras:
+    #1: recuperamos toda la fila de la tabla topic answers y nos quedamos con el campo answer
+    # voted_answers_class = get_topic_answers_by_topic_id(id_topic)
+    # voted_answers = [int(answer.answer) for answer in voted_answers_class]
+    #2: recuperamos solo el campo answer directamente en la query:
+    voted_answers = [get_answer_by_id(id_topic)]      
+    print (voted_answers)
