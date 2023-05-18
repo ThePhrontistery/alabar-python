@@ -218,6 +218,8 @@ def get_unique_answers(voted_answers):
     return np.unique(x).tolist()
 
 def update_answers_count(voted_answers, possible_answers):
+    "Actualización count"
+    #para poder utilizar el sum necesitamos pasar de tipo lista a array
     x = np.array(voted_answers)
     for answer in possible_answers:
         answer.count = (x == answer.order).sum()
@@ -294,13 +296,35 @@ def delete_topic_item(topic_item):
         session.delete(topic_item)
        
 def show_result_multiple(id_topic):
+    "Muestra los resultados de las votaciones para el topic multiple choice text"
     # Recuperamos lista de respuestas posibles:
     # Haremos un acceso a BBDD Topic_item by id para recuperar todos los items de ese id que serán las posibles respuestas
-    text_answers = get_topic_item_by_id_topic(id_topic).text_answers
-    # recuperamos lista de respuestas dadas para un topic determinado de dos maneras:
-    #1: recuperamos toda la fila de la tabla topic answers y nos quedamos con el campo answer
-    # voted_answers_class = get_topic_answers_by_topic_id(id_topic)
-    # voted_answers = [int(answer.answer) for answer in voted_answers_class]
-    #2: recuperamos solo el campo answer directamente en la query:
-    voted_answers = [get_answer_by_id(id_topic)]      
-    print (voted_answers)
+    topic_item = get_topic_item_by_id_topic(id_topic)
+    # inicializamos una lista que vamos a crear de objetos tipo Answer, cada answer tenemos emoji vacío, el order, text y count
+    list_answers = []
+    for i in topic_item:
+        answer = Answer(" ",i.id_order,i.text_answers,0)
+        list_answers.append(answer)
+        #esto nos devuelve
+        #0:Answer(emoji=' ', order=1, text='Lunes, Miercoles', count=0)
+        #1:Answer(emoji=' ', order=2, text='Miércoles, Jueves', count=0)
+        #2:Answer(emoji=' ', order=3, text='Días alternos', count=0)
+        #3:Answer(emoji=' ', order=4, text='Me da igual', count=0)
+    #Reuperamos el campo answer directamente en la query y creamos una lista
+    list_voted_answers = [i for i in get_answer_by_id(id_topic)]    
+    #esto nos devuelve ['1, 3', '1, 4', '2, 3']
+    #voted_answers va a tener una lista con los valores de list_voted_answers formateados a enteros
+    voted_answers= []
+    # Recorrer cada cadena en la lista original
+    for cadena in list_voted_answers:
+        # Dividir la cadena en elementos individuales
+        elementos = cadena.split(',')  
+        for elemento in elementos:
+           numero = int(elemento)  
+           voted_answers.append(numero) 
+           #esto nos devuelve [1,3,1,4,2,3]
+    #el método update_answers_count actualiza el count de la lista list_answers a partir de las respuestas recogidas
+    # en la lista voted_answers       
+    list_answers = update_answers_count(voted_answers, list_answers)
+    
+    return list_answers
