@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, show_result_multiple, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic, Topic_data
 
 
@@ -50,12 +50,7 @@ def rating_results():
     #1.1 Obtenemos datos de pantalla con request.form (topic_id y radio -rating-)
     id_topic = request.form['topic_id']
     rating = request.form['emoji']
-
-    #1.2 Creamos answers como un diccionario con clave de 1 a 5 (para cada emoticono) y asignando valor 1 al que tenga valor
-    # en lo recibido en rating (value de 'radio')
-    #answers = {'1':0, '2':0, '3':0, '4':0, '5':0}
-    #if rating in answers:
-    #    answers[rating] = 1 
+    #en answer vamos a guardar el valor del emoticono seleccionado
     answer = rating
     
     #1.3 save_results (estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD) -> True o False 
@@ -187,7 +182,7 @@ def multiple_choice_text():
 
     results = 0
     if topic.status == False or current_date >= db_end_date:
-        results = show_result(id_topic)
+       results = show_result_multiple(id_topic)
 
     return render_template('MultipleChoiceText.html', topic=topic, topic_ticket=topic_ticket, results=results, current_date=current_date, db_end_date=db_end_date, topic_items=topic_item)
 
@@ -196,15 +191,12 @@ def mct_results():
     """Actualizacion en BBDD los resultados del topic multiple choice text""" 
     #1.1 Obtenemos datos de pantalla con request.form (topic_id y radio -rating-)
     id_topic = request.form['topic_id']
-    rating = request.form['item-0']
-
-    #1.2 Creamos answers como un diccionario con clave de 1 a 5 (para cada emoticono) y asignando valor 1 al que tenga valor
-    # en lo recibido en rating (value de 'radio')
-    #answers = {'1':0, '2':0, '3':0, '4':0, '5':0}
-    #if rating in answers:
-    #    answers[rating] = 1 
-    answer = rating
-    
+    #rating = request.form['item-0']
+    selected_items = request.form.getlist("selected_item[]")
+    #answer = {valor: indice for indice, valor in enumerate(selected_items)}
+    #con join paso a string la lista de los items seleccionados para grabarlo en BBDD
+    answer = ', '.join(selected_items)
+    #print(answer)
     #1.3 save_results (estando en pantalla RESULT,al dar al botón SAVE se graba en BBDD) -> True o False 
     # Tiene los metodos 'create_answer', 'update_ticket' y 'update_topic'
     # Si ha grabado bien, vuelve a la funcion index para volver a mostrar la tabla de topic actualizada

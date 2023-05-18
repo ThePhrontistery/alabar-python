@@ -42,6 +42,8 @@ VALUES
 (3, '♠A of ♠ - Consum Sprint 16', 2, '♠A of ♠Topic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
 (4, '¿Cuándo vamos a la Oficina?', 3, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
 (5, 'Prueba1', 1, 'MultipleChoiceTextTopic', '2023-05-17 00:00:00.000000', '2023-05-24 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000');
+(6, 'Prueba topic multiple text', 1, 'MultipleChoiceTextTopic', '2023-05-17 00:00:00.000000', '9999-12-31 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000');
+(7, 'demo mía de rating', 1, 'RatingTopic', '2023-05-17 00:00:00.000000', '9999-12-31 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000');
 
 
 
@@ -55,7 +57,13 @@ VALUES
 (1, 3, 0),
 (2, 4, 0),
 (3, 4, 0),
-(1, 5, 0);
+(1, 5, 0),
+(1, 7, 0),
+(1, 6, 0),
+(2, 7, 0),
+(2, 6, 0),
+(3, 6, 0),
+
 
 
 INSERT INTO topic_item
@@ -74,7 +82,11 @@ VALUES
 (11, 5, 1, 'Lunes, Miercoles'),
 (12, 5, 2, 'Martes, Jueves'),
 (13, 5, 3, 'Una semana lu, mi, otra ma, jue'),
-(14, 5, 4, 'Me da igual');;
+(14, 5, 4, 'Me da igual'),
+(15, 6, 1, 'Lunes, Miercoles'),
+(16, 6, 2, 'Miércoles, Jueves'),
+(17, 6, 3, 'Días alternos'),
+(18, 6, 4, 'Me da igual');;
 
 INSERT INTO topic_answer
 (id_topic_answer, id_topic, answer)
