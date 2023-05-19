@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, show_result_multiple, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic, Topic_data
 
 
@@ -16,7 +16,7 @@ def index():
     #Se recuperan los topics de topic_ticket, topics que puede responder y topics que administra
     user = get_user_by_code(session['CURRENT_USER'])
     table_topics = get_topics_by_user_and_owner(user.id_user)
-    current_date = datetime.datetime.now()
+    current_date = datetime.datetime.now() #-> sacaria formato datetime.datetime(2023, 5, 19, 13, 55, 13, 957567)
 
     # Reemplazo el contenido de id_owner por el name_user
     for table_topic in table_topics:
@@ -63,11 +63,29 @@ def rating_results():
 
 @alabar_bp.route('/alabar/reopen', methods=['GET'])
 def reopen():
+    """desde el listado de topic, dan al botón de reopen""" 
     id_topic = request.args.get('topic_id')
-    if topic_reopen(id_topic):
-        return redirect(url_for('alabar.index'))
+    # topic es objeto de la clase Topic con el registro del id_topic seleccionado
+    topic = get_topic_by_id(id_topic)
+    if topic:
+        return render_template('modifytopic.html', topic=topic)
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido reabrir, inténtelo más tarde")
+
+
+@alabar_bp.route('/alabar/modify_topic', methods=['POST'])
+def modify_topic():
+    """Actualizacion en BBDD los resultados de la modificacion de end_date y del status del topic al dar a reopen""" 
+    #1.1 Obtenemos datos de pantalla con request.form (topic_id)
+    id_topic = request.form['id_topic']
+    # end_date recuperada del formulario es tipo str y tiene formato AAAA-MM-DDTHH:MM:SS.
+    # hay que convertirlo a objeto datetime.datetime (con strptime) y a formato AAAA-MM-DD HH:MM:SS
+    end_date= datetime.datetime.strptime(request.form['end_date'], "%Y-%m-%dT%H:%M")
+    #Estando en pantalla de Modify Topic end_date, ha modifcado end_date y da a save y se actualiza end_date y status a True
+    if topic_reopen(id_topic,end_date):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
 
 @alabar_bp.route('/alabar/delete', methods=['GET'])
@@ -204,3 +222,11 @@ def mct_results():
         return redirect(url_for('alabar.index'))
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+
+@alabar_bp.route('/alabar/close', methods=['GET'])
+def close():
+    id_topic = request.args.get('topic_id')
+    if topic_close(id_topic):
+        return redirect(url_for('alabar.index'))
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")

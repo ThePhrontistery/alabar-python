@@ -137,10 +137,10 @@ def update_topic(topic):
     return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
                               .values(status=topic.status, participation= topic.participation))
 
-def topic_reopen(id_topic):
-    "Estando en pantalla de lista, pulsar el boton reopen"
+def topic_reopen(id_topic,end_date):
+    "Estando en pantalla de Modify Topic end_date, ha modifcado end_date y da a save y se actualiza end_date y status a True"
     with transactional_session() as session:
-       update_topic_reopen(get_topic_by_id(id_topic))
+       update_topic(get_topic_by_id(id_topic),status=True,end_date=end_date)
        result = True
        return result
     
@@ -151,11 +151,11 @@ def topic_delete(id_topic):
        result = True
        return result
     
-def update_topic_reopen(topic):
+def update_topic(topic,status,end_date):
     '''Update record in topic:
-       Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic'''
-    topic.status = True
-    topic.end_date = datetime.datetime(9999, 12, 31, 00, 00, 00, 00000)
+       Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic tanto para reopen como close'''
+    topic.status = status
+    topic.end_date = end_date
     return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
                               .values(status=topic.status, end_date= topic.end_date))
 
@@ -328,3 +328,11 @@ def show_result_multiple(id_topic):
     list_answers = update_answers_count(voted_answers, list_answers)
     
     return list_answers
+
+    
+def topic_close(id_topic):
+    "Estando en pantalla de lista, pulsar el boton close para cerrar topic (False) y actualizar end_date a la del dia"
+    with transactional_session() as session:
+       update_topic(get_topic_by_id(id_topic),status=False,end_date=datetime.datetime.now())
+       result = True
+       return result

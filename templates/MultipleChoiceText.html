@@ -19,7 +19,6 @@
     {% elif topic_ticket.completed == False%} 
         <form action="{{ url_for('alabar.mct_results') }}" method="POST">
             <input type="hidden" name="topic_id" value={{topic.id_topic}}>
-            <pre>{{ topic.id_topic | pprint }}</pre>
             <div class="space-y-4">
                 {% for topic_item in topic_items %}
                     <div class="flex items-center">
