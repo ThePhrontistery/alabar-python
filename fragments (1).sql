@@ -12,7 +12,8 @@ VALUES
 (1, 'Marga Nacher','MNacher', 'marga@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
 (2, 'Gonzalo Pardo','GPardo', 'gonzalo@email.com', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.WXj3mfkitZkS76ykL61NQy1cwOFYhCS', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
 (3, 'Jill Esteban','JEsteban', 'jill@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO',''),
-(4, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','');
+(4, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','')
+;
 
 INSERT INTO "group"
 (id_group, name_group,id_owner)
@@ -20,7 +21,8 @@ VALUES
 (1, 'Group Sprint 16',1),
 (2, 'Group Sprint 17',2),
 (3, 'Group lunch',3),
-(4, 'Group Team Leaders',3);
+(4, 'Group Team Leaders',3)
+;
 
 
 INSERT INTO user_group
@@ -37,13 +39,15 @@ VALUES
 INSERT INTO topic
 (id_topic, title_topic, id_owner, type_topic, start_date, end_date, status, participation,deleted_date)
 VALUES
-(1, '♠A of ♠ - Consum Sprint 17', 1, '♠A of ♠Topic', '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
-(2, 'Rate Demo Sprint 16', 1, 'RatingTopic', '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
-(3, '♠A of ♠ - Consum Sprint 16', 2, '♠A of ♠Topic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(1, 'Rating participation 100%', 1, 'RatingTopic'  , '2023-04-20 00:00:00.000000', '2023-05-20 00:00:00.000000', False, 100,'9999-12-31 00:00:00.000000'),
+(2, 'Rating No esta en el grupo', 1, 'RatingTopic' , '2023-04-18 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(3, 'Rating preparado para votar', 2, 'RatingTopic', '2023-04-01 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
 (4, '¿Cuándo vamos a la Oficina?', 3, 'MultipleChoiceTextTopic', '2023-02-12 00:00:00.000000', '2023-05-20 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
-(5, 'Prueba1', 1, 'MultipleChoiceTextTopic', '2023-05-17 00:00:00.000000', '2023-05-24 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
+(5, 'Rating enddate has expired', 1, 'RatingTopic', '2023-05-17 00:00:00.000000', '2023-05-19 00:00:00.000000', True, 50,'9999-12-31 00:00:00.000000'),
 (6, 'Prueba topic multiple text', 1, 'MultipleChoiceTextTopic', '2023-05-17 00:00:00.000000', '9999-12-31 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000'),
-(7, 'demo mía de rating', 1, 'RatingTopic', '2023-05-17 00:00:00.000000', '9999-12-31 00:00:00.000000', True, 0,'9999-12-31 00:00:00.000000');
+(7, 'Rating permite reopen', 1, 'RatingTopic'     , '2023-05-17 00:00:00.000000', '9999-12-31 00:00:00.000000', False, 0,'9999-12-31 00:00:00.000000'),
+(8, 'Rating Ya has contestdo', 2, 'RatingTopic'   , '2023-05-19 00:00:00.000000', '2023-06-30 00:00:00.000000', True, 50,'9999-12-31 00:00:00.000000')
+;
 
 
 
@@ -51,18 +55,23 @@ VALUES
 INSERT INTO topic_ticket
 (user_id, topic_id, completed)
 VALUES	  
-(2, 1, 0),
+(2, 1, 1),
 (2, 2, 0),
 (3, 2, 0),
 (1, 3, 0),
+(2, 3, 0),
 (2, 4, 0),
 (3, 4, 0),
 (1, 5, 0),
-(1, 7, 0),
+(2, 5, 1),
 (1, 6, 0),
-(2, 7, 0),
 (2, 6, 0),
-(3, 6, 0);
+(3, 6, 0),
+(1, 7, 0),
+(2, 7, 0),
+(1, 8, 1),
+(2, 8, 0)
+;
 
 
 
@@ -86,16 +95,16 @@ VALUES
 (15, 6, 1, 'Lunes, Miercoles'),
 (16, 6, 2, 'Miércoles, Jueves'),
 (17, 6, 3, 'Días alternos'),
-(18, 6, 4, 'Me da igual');;
+(18, 6, 4, 'Me da igual')
+;
 
 INSERT INTO topic_answer
 (id_topic_answer, id_topic, answer)
 VALUES
-(1, 3, '3'),
-(2, 3, '3'),
-(3, 3, '2'),
-(4, 3, '2'),
-(5, 1, '3');
+(2, 1, 3),
+(3, 5, 1),
+(4, 8, 5)
+;
 
 
 --INSERT INTO user_topic
