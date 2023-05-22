@@ -1,0 +1,11 @@
+
+{% for user in users %}
+<div class="flex mb-4 items-center">
+  <p class="w-full text-grey-darkest">{{ user.user_id}}</p>
+  <form class="flex">
+      <input type="hidden" value="{{user.topic_id}}" name="topic_id"></input>
+      <input type="hidden" value="{{user.user_id}}" name="user_id"></input>
+      <a href="#" hx-post="{{ url_for('alabar.delete_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete user</a>
+  </form>
+  </div>
+{% endfor %}
