@@ -336,3 +336,28 @@ def topic_close(id_topic):
        update_topic(get_topic_by_id(id_topic),status=False,end_date=datetime.datetime.now())
        result = True
        return result
+
+def save_results_user(user_id,topic_id):
+    "Estando en pantalla NEW TOPIC,al dar al botón ADD USERS se graba en BBDD"
+    with transactional_session() as session:
+        #Metodo create_topic_user que inserta en 'Topic_ticket' cada user (devuelve topic_ticket) 
+        create_topic_ticket(user_id,topic_id)
+        result = True
+        return result
+    
+def create_topic_ticket(user_id,topic_id):
+    "Create record in topic_ticket"
+    #Creamos objeto topic_ticket de la clase Topic_ticket pasando los campos por parametro para luego añadirlos a la tabla 
+    topic_ticket = Topic_ticket(user_id=user_id, topic_id=topic_id,completed=0)
+    return db.session.add(topic_ticket)  
+
+def find_ticket_by_id_topic(user_id,topic_id):
+    "Select tabla Topic_ticket by topic_id y user_id, para recuperar el registro entero a borrar"
+    topic_ticket = db.session.execute(
+        db.select(Topic_ticket).filter_by(user_id=user_id,topic_id=topic_id)).scalar_one()
+    return topic_ticket
+
+def delete_topic_ticket(topic_ticket):
+    "Accion de borrado del registro de topic_ticket"
+    with transactional_session() as session:
+        session.delete(topic_ticket)

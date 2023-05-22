@@ -1,7 +1,7 @@
 import datetime
-from flask import Blueprint, redirect, render_template, request, session, url_for
+from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_topic_item, find_item_by_id_topic_item, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, save_results, save_results_item, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic, Topic_data
 
 
@@ -127,12 +127,12 @@ def save_topic():
     topic_select = save_topic_results(topic_data)
     if topic_select:
         topic = get_id_topic_by_data(topic_select)
-        if typetopic == 'RatingTopic':
-           return redirect(url_for('alabar.index'))
-        else:
+        #if typetopic == 'RatingTopic':
+        #   return redirect(url_for('alabar.index'))
+        #else:
            #return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
            # Si ya se ha creado el topic, vamos al html a la segunda parte (crear topic_item)
-           return render_template('newtopic.html',typetopics=typetopics,topic=topic) 
+        return render_template('newtopic.html',typetopics=typetopics,topic=topic) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
@@ -230,3 +230,44 @@ def close():
         return redirect(url_for('alabar.index'))
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
+
+@alabar_bp.route('/alabar/add_user', methods=['POST'])
+def add_user():
+    """Actualizacion en BBDD los resultados del topic_ticket""" 
+    #1.1 Obtenemos datos de pantalla con request.form (id_topic y el nombre de la persona añadido)
+    topic_id = request.form['id_topic']
+    name_user = request.form['name_user']
+    
+    #1.2. Se recupera el objeto de tipo User, lo necesitamos para acceder a topic_ticket
+    try:
+        user_id = get_user_by_name(name_user).id_user
+    except:        
+        respuesta = {'mensaje':'Usuario no existe'}
+        return jsonify(respuesta)
+    
+    #1.3 save_results_user (al dar al botón ADD USER se graba en BBDD de topic_ticket) -> True o False 
+    # Tiene el metodo 'create_topic_user'
+    # Si ha grabado bien, actualiza la lista de topic_ticket para el id_topic e id_user
+    if save_results_user(user_id,topic_id):
+        return render_users(topic_id)
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+
+def render_users(topic_id):
+    """Metodo que presenta la lista de topic_ticket actualizada con template""" 
+    "Select tabla Topic_ticket by id_topic, para recuperar todos tickets de un topic"
+    users = get_topic_ticket_by_topic(topic_id)
+    return render_template('users.html', users=users)
+
+@alabar_bp.route('/alabar/delete_user', methods=['POST'])
+def delete_user():
+    """Actualizacion en BBDD (topic_ticket) al dar al botón borrar el user introducido""" 
+    topic_id = int(request.form['topic_id'])
+    user_id = int(request.form['user_id'])
+    # Select tabla Topic_ticket by topic_id y user_id, para recuperar el registro entero a borrar
+    topic_ticket = find_ticket_by_id_topic(user_id,topic_id)
+    # Para volver a presentar los topic_ticket del id_topic necesitamos tenerlo (para el render_users)
+    topic_id = topic_ticket.topic_id
+    # Accion de borrado del registro de topic_ticket
+    delete_topic_ticket(topic_ticket)
+    return render_users(topic_id)
