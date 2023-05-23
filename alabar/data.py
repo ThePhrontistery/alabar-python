@@ -343,13 +343,15 @@ def save_results_user(user_id,topic_id):
         #Metodo create_topic_user que inserta en 'Topic_ticket' cada user (devuelve topic_ticket) 
         create_topic_ticket(user_id,topic_id)
         result = True
-        return result
+        return result       
     
 def create_topic_ticket(user_id,topic_id):
     "Create record in topic_ticket"
     #Creamos objeto topic_ticket de la clase Topic_ticket pasando los campos por parametro para luego añadirlos a la tabla 
     topic_ticket = Topic_ticket(user_id=user_id, topic_id=topic_id,completed=0)
-    return db.session.add(topic_ticket)  
+    #return db.session.add(topic_ticket)  
+    db.session.add(topic_ticket)  
+    return topic_ticket
 
 def find_ticket_by_id_topic(user_id,topic_id):
     "Select tabla Topic_ticket by topic_id y user_id, para recuperar el registro entero a borrar"
