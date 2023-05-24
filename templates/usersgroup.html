@@ -1,6 +1,8 @@
 
 {% for usergroup in usersgroup %}
 <div class="flex mb-4 items-center">
-  <p class="w-full text-grey-darkest">{{ usergroup.id_group}}</p>
+  <!--pre>{{ usergroup.id_user | pprint }}</pre-->
+  <!--pre>{{ usergroup.name_user | pprint }}</pre-->
+  <p class="w-full text-grey-darkest">{{ usergroup.name_user}}</p>
 </div>
 {% endfor %}
