@@ -365,12 +365,16 @@ def delete_topic_ticket(topic_ticket):
         session.delete(topic_ticket)
 
 def get_groups():
-    #Select todos los grupos
+    "Select todos los grupos desde tabla Group"
     return db.session.execute(db.select(Group)).scalars().all()
 
 def get_group_by_id_group(id_group):
+    "Select de la tabla Group del grupo seleccionado en el combo a través del id_group"
     return db.session.execute(db.select(Group).filter_by(id_group=id_group)).scalar_one()
 
 def get_users_by_id_group(id_group):
+    "Obtener los usuarios del grupo seleccionado en el combo"
+    #group es un objeto de la clase Group con los datos del grupo seleccionado
     group = get_group_by_id_group(id_group)
+    #esta función devuelve la propiedad users (objeto User) del objeto Group
     return group.users

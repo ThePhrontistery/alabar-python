@@ -31,7 +31,6 @@
     <div >
         <h1 class="text-xl font-bold">Topic data</h1>
         <div >
-            <form>
                 <div >
                     <label>Titulo del topic: </label> 
                     <label class="bg-grey shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.title_topic}}</label>
@@ -43,24 +42,22 @@
                     <label class="bg-grey shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.type_topic}}</label>
                     <br> </br>
                 </div>
-                
-                <div class="form-group">
-                    <label for="group-select">Elegir Grupo:</label>
-                    <select id="group-select" hx-get="{{ url_for('usersgroup') }}" hx-trigger="change" hx-target="#usersgroup-container" name="id_group" class="select select-bordered w-full max-w-xs">
-                        {% for group in groups %}
-                        <option value="{{ group.id_group }}">{{ group.name_group }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                    
-
-
-                
-                <div id="usersgroup-container">
-                    {% include 'usersgroup.html' %}
-                </div>  
-                <div>
+                <form>
+                    <div class="form-group">
+                        <label for="group-select" class="text-xl font-bold">Choose group:</label>
+                        <select id="group-select" hx-get="{{ url_for('alabar.usersgroup') }}" hx-trigger="change" hx-target="#usersgroup-container" name="id_group" class="select select-bordered w-full max-w-xs">
+                            {% for group in groups %}
+                               <option value="{{ group.id_group }}">{{ group.name_group }}</option>
+                            {% endfor %}
+                        </select>
+                        <br> </br>
+                    </div>
+                    <div id="usersgroup-container">
+                        {% include 'usersgroup.html' %}
+                    </div>  
+               </form>
+               <div>
+                    <br> </br>
                     <h1 class="text-xl font-bold">Add user for Topic</h1>
                     <input type="hidden" name="id_topic" value={{topic.id_topic}}>                
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user">
@@ -77,7 +74,7 @@
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
                     <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Add item</button>
                 {%endif%}
-            </form>
+            
         </div>
         <br> </br>
         <div id="items-container">

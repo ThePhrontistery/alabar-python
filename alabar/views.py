@@ -2,7 +2,7 @@ import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
 from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
-from alabar.models import Topic, Topic_data
+from alabar.models import Group, Topic, Topic_data
 
 
 
@@ -101,8 +101,12 @@ def newtopic():
     """Pasar a la plantilla de newtopic.html los tipos de topic""" 
     # Creamos objeto topic de la clase Topic, inicializado 
     topic = Topic()
+    #inicializamos usersgroup que es un objeto de la clase User  
+    usersgroup = Group().users
+    #inicializamos groups que es un objeto de la clase Group  
+    groups = Group()
     # La primera vez que va al html el topic no esta creado (entra en la primera parte)
-    return render_template('newtopic.html', typetopics=typetopics,topic=topic)
+    return render_template('newtopic.html', typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups)
 
 @alabar_bp.route('/alabar/save_topic', methods=['POST'])
 def save_topic():
@@ -127,17 +131,16 @@ def save_topic():
     topic_select = save_topic_results(topic_data)
     if topic_select:
         topic = get_id_topic_by_data(topic_select)
-        #if typetopic == 'RatingTopic':
-        #   return redirect(url_for('alabar.index'))
-        #else:
-           #return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
-           # Si ya se ha creado el topic, vamos al html a la segunda parte (crear topic_item)
+        #groups es objeto de clase Group que tiene todos los grupos desde tabla Group. 
         groups = get_groups()
+        #si ha encontrado al menos un grupo va a presentar los usuarios del primer grupo de la lista [0]
+        #usersgroup es objeto de clase User (a través de la propiedad users de la clase Group)
         if len(groups) > 0:
-           tasks = get_tasks_by_project(projects[0].id)
-
-           #return render_template('index.html', tasks=projects[0].tasks, projects=projects)   
-        return render_template('newtopic.html',typetopics=typetopics,topic=topic) 
+           usersgroup=groups[0].users
+        else:
+            return render_template('error.html',
+                               error_message="No hay grupos creados", error_description="Por favor, debe crear algún grupo")
+        return render_template('newtopic.html',typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
@@ -284,12 +287,17 @@ def delete_user():
     delete_topic_ticket(topic_ticket)
     return render_users(topic_id)
 
-@alabar_bp.route('/alabar/usersgroup', methods=['POST'])
+@alabar_bp.route('/alabar/usersgroup', methods=['GET'])
 def usersgroup():
+    """Dentro de newtopic.html presentamos los usuarios del grupo seleccionado""" 
+    #pasamos el parámetro de id_group con el grupo seleccionado en el combo
     id_group = request.args.get("id_group")
     return render_usersgroup(id_group)
 
 
 def render_usersgroup(id_group):
+    """Presenta la plantilla usergroup.html con los usuario del grupo seleccionado en el combo""" 
+    #usersgroup es un objeto de la clase User que nos retorna get_users_by_id_group (return group.users)
+    #en este punto ya no tenemos id_group, porque solo retornamos el objeto de tipo users.
     usersgroup = get_users_by_id_group(id_group)
     return render_template('usersgroup.html', usersgroup=usersgroup)
