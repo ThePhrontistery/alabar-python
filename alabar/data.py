@@ -2,7 +2,7 @@ import datetime
 import numpy as np
 from sqlalchemy import func, or_
 from session_context import transactional_session
-from .models import Answer, Stat, Topic_answer, Topic_data, Topic_item, User, Topic, Topic_ticket, db
+from .models import Answer, Group, Stat, Topic_answer, Topic_data, Topic_item, User, Topic, Topic_ticket, db
 from sqlalchemy.sql import select
 
 typetopics = [
@@ -152,7 +152,7 @@ def topic_delete(id_topic):
        return result
     
 def update_topic(topic,status,end_date):
-    '''Update record in topic:
+    '''Update record in topic:update
        Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic tanto para reopen como close'''
     topic.status = status
     topic.end_date = end_date
@@ -363,3 +363,14 @@ def delete_topic_ticket(topic_ticket):
     "Accion de borrado del registro de topic_ticket"
     with transactional_session() as session:
         session.delete(topic_ticket)
+
+def get_groups():
+    #Select todos los grupos
+    return db.session.execute(db.select(Group)).scalars().all()
+
+def get_group_by_id_group(id_group):
+    return db.session.execute(db.select(Group).filter_by(id_group=id_group)).scalar_one()
+
+def get_users_by_id_group(id_group):
+    group = get_group_by_id_group(id_group)
+    return group.users

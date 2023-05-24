@@ -17,4 +17,6 @@ id_order_max =  session.query(func.max(Topic_item.id_order)
            .filter(Topic_item.id_topic == id_topic)).scalar()
 print('id_order_max: ', id_order_max)
 
-
+db.session.execute(db.update(Topic).where(Topic.end_date < current_date)
+                              .where(Topic.status == True)
+                              .values(status=False,end_date=datetime.datetime.now()))
