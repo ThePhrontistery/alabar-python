@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Topic, Topic_data
 
 
@@ -132,6 +132,11 @@ def save_topic():
         #else:
            #return render_template('newtopicitem.html', id_topic=topic.id_topic ) 
            # Si ya se ha creado el topic, vamos al html a la segunda parte (crear topic_item)
+        groups = get_groups()
+        if len(groups) > 0:
+           tasks = get_tasks_by_project(projects[0].id)
+
+           #return render_template('index.html', tasks=projects[0].tasks, projects=projects)   
         return render_template('newtopic.html',typetopics=typetopics,topic=topic) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
@@ -278,3 +283,13 @@ def delete_user():
     # Accion de borrado del registro de topic_ticket
     delete_topic_ticket(topic_ticket)
     return render_users(topic_id)
+
+@alabar_bp.route('/alabar/usersgroup', methods=['POST'])
+def usersgroup():
+    id_group = request.args.get("id_group")
+    return render_usersgroup(id_group)
+
+
+def render_usersgroup(id_group):
+    usersgroup = get_users_by_id_group(id_group)
+    return render_template('usersgroup.html', usersgroup=usersgroup)
