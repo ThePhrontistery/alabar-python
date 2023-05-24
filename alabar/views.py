@@ -242,16 +242,23 @@ def add_user():
     try:
         user_id = get_user_by_name(name_user).id_user
     except:        
-        respuesta = {'mensaje':'Usuario no existe'}
+        respuesta = 'Usuario no existe'
         return jsonify(respuesta)
     
-    #1.3 save_results_user (al dar al botón ADD USER se graba en BBDD de topic_ticket) -> True o False 
+    #1.3 Comprobar que el registro a insertar en topic_ticket no existe
+    topic_ticket = get_topic_ticket_by_topic_and_user(topic_id, user_id)
+    #Si lo encuntra, muestra error
+    #Si no lo encuentra llama a save_results_user (al dar al botón ADD USER se graba en BBDD de topic_ticket)->True o False 
     # Tiene el metodo 'create_topic_user'
     # Si ha grabado bien, actualiza la lista de topic_ticket para el id_topic e id_user
-    if save_results_user(user_id,topic_id):
-        return render_users(topic_id)
-    else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+    if topic_ticket != None: 
+        respuesta = 'Usuario ya existente'
+        return jsonify(respuesta)
+    else: 
+        if save_results_user(user_id,topic_id):
+            return render_users(topic_id)
+        else:
+            return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
 def render_users(topic_id):
     """Metodo que presenta la lista de topic_ticket actualizada con template""" 
