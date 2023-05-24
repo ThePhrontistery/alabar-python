@@ -152,7 +152,7 @@ def topic_delete(id_topic):
        return result
     
 def update_topic(topic,status,end_date):
-    '''Update record in topic:
+    '''Update record in topic:update
        Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic tanto para reopen como close'''
     topic.status = status
     topic.end_date = end_date
