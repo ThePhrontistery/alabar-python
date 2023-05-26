@@ -29,9 +29,10 @@
     </div>
 {%else%} <!--Si el topic ya se ha salvado (existe id_topic), presentamos datos y creamos topic_item-->
     <div >
-        <h1 class="text-xl font-bold">Topic data</h1>
-        <div >
-                <div >
+        <h1 class="text-xl font-bold">Topic data</h1>        
+            <form>
+                <fieldset>
+                    <legend>Information Topic</legend>
                     <label>Titulo del topic: </label> 
                     <label class="bg-grey shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.title_topic}}</label>
                     <br> </br>
@@ -41,8 +42,10 @@
                     <label>Type Topic: </label>
                     <label class="bg-grey shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.type_topic}}</label>
                     <br> </br>
-                </div>
-                <form>
+                </fieldset> 
+            </form> 
+            <form>
+                <fieldset>              
                     <div class="form-group">
                         <label for="group-select" class="text-xl font-bold">Choose group:</label>
                         <select id="group-select" hx-get="{{ url_for('alabar.usersgroup') }}" hx-trigger="change" hx-target="#usersgroup-container" name="id_group" class="select select-bordered w-full max-w-xs">
@@ -54,28 +57,32 @@
                     </div>
                     <div id="usersgroup-container">
                         {% include 'usersgroup.html' %}
-                    </div>  
-               </form>
-               <div>
+                    </div>                 
+                </fieldset>   
+            </form>
+            <form>                 
+                <div>
+                        <br> </br>
+                        <h1 class="text-xl font-bold">Add user for Topic</h1>
+                        <input type="hidden" name="id_topic" value={{topic.id_topic}}>                
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user">
+                        <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-sm">Add user</button>
+                        <br> </br>   
+                    </div>                                             
+                    <div id="users-container">
+                        {% include 'users.html' %}
+                    </div>
                     <br> </br>
-                    <h1 class="text-xl font-bold">Add user for Topic</h1>
-                    <input type="hidden" name="id_topic" value={{topic.id_topic}}>                
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user">
-                    <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-sm">Add user</button>
-                    <br> </br>   
-                </div>                                             
-                <div id="users-container">
-                    {% include 'users.html' %}
-                </div>
-                <br> </br>
-                {% if topic.type_topic != 'RatingTopic' %}
-                    <h1 class="text-xl font-bold">Create Items for Topic</h1>
-                    <input type="hidden" name="id_topic" value={{topic.id_topic}}>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
-                    <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Add item</button>
-                {%endif%}
-            
-        </div>
+            </form>
+            <form>                    
+                    {% if topic.type_topic != 'RatingTopic' %}
+                        <h1 class="text-xl font-bold">Create Items for Topic</h1>
+                        <input type="hidden" name="id_topic" value={{topic.id_topic}}>
+                        <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
+                        <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Add item</button>
+                    {%endif%}
+            </form>
+        
         <br> </br>
         <div id="items-container">
             {% include 'items.html' %}
