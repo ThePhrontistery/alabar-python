@@ -2,7 +2,7 @@ import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
 from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
-from alabar.models import Group, Topic, Topic_data
+from alabar.models import Group, Topic, Topic_data, Topic_ticket, Topic_ticket_user
 
 
 
@@ -271,8 +271,11 @@ def add_user():
 def render_users(topic_id):
     """Metodo que presenta la lista de topic_ticket actualizada con template""" 
     "Select tabla Topic_ticket by id_topic, para recuperar todos tickets de un topic"
-    users = get_topic_ticket_by_topic(topic_id)
-    return render_template('users.html', users=users)
+    topic_tickets_user = Topic_ticket_user()
+    topic_tickets_user.topic_tickets = get_topic_ticket_by_topic(topic_id)
+    for topic_ticket in topic_tickets_user.topic_tickets:
+        topic_tickets_user.users = get_user_by_id(topic_ticket.user_id)
+    return render_template('users.html', topic_ticket_user=topic_tickets_user.users,topic_id=topic_id)
 
 @alabar_bp.route('/alabar/delete_user', methods=['POST'])
 def delete_user():
