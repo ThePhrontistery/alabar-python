@@ -1,8 +1,9 @@
+from typing import List
 import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
 from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
-from alabar.models import Group, Topic, Topic_data, Topic_ticket, Topic_ticket_user
+from alabar.models import Group, Topic, Topic_data, Topic_ticket, Topic_ticket_user, User
 
 
 
@@ -269,19 +270,30 @@ def add_user():
             return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
 def render_users(topic_id):
-    """Metodo que presenta la lista de topic_ticket actualizada con template""" 
-    "Select tabla Topic_ticket by id_topic, para recuperar todos tickets de un topic"
-    topic_tickets_user = Topic_ticket_user()
+    """Metodo que presenta la lista de topic_ticket y sus users correspondiente actualizada con template""" 
+    #Inicializamos objeto topic_tickets_user de la clase Topic_ticket_user (que tiene subclase Topic_ticket
+    # y subclase Users)
+    topic_tickets_user = Topic_ticket_user(List[Topic_ticket], List[User])
+    #Creo objeto topic_tickets_user.topic_tickets (de la subclase Topic_ticket) que tiene todas las filas
+    # de la tabla Topic_ticket de un topic_id dado.
     topic_tickets_user.topic_tickets = get_topic_ticket_by_topic(topic_id)
+    #Creo objeto topic_tickets_user.users (de la subclase Users) como una lista inicializada de clase Users
+    topic_tickets_user.users = []
+    #Recorro la tabla topic_tickets_user.topic_tickets (de tipo subclase Topic_ticket).
+    # Para cada fila con el user_id accedo a tabla User (con get_user_by_id, pasando como parametro el user_id), 
+    # Con el append voy creando la lista de los users para poder iterar sobre ello en el users.html
     for topic_ticket in topic_tickets_user.topic_tickets:
-        topic_tickets_user.users = get_user_by_id(topic_ticket.user_id)
+        topic_tickets_user.users.append(get_user_by_id(topic_ticket.user_id))
+    #Como parametros paso topic_tickets_user.users (objeto lista de subclase Users dentro de clase 
+    # Topic_ticket_user que tiene los users de ese topic para luego mostrar el name_user) y topic_id
     return render_template('users.html', topic_ticket_user=topic_tickets_user.users,topic_id=topic_id)
+
 
 @alabar_bp.route('/alabar/delete_user', methods=['POST'])
 def delete_user():
     """Actualizacion en BBDD (topic_ticket) al dar al botón borrar el user introducido""" 
     topic_id = int(request.form['topic_id'])
-    user_id = int(request.form['user_id'])
+    user_id = int(request.form['id_user'])
     # Select tabla Topic_ticket by topic_id y user_id, para recuperar el registro entero a borrar
     topic_ticket = find_ticket_by_id_topic(user_id,topic_id)
     # Para volver a presentar los topic_ticket del id_topic necesitamos tenerlo (para el render_users)
