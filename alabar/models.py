@@ -121,3 +121,7 @@ class Topic_data:
     #status: True
     #participation: 0
     #deleted_date: datetime.datetime(9999, 12, 31)
+
+class Topic_ticket_user:
+    topic_tickets = Topic_ticket
+    users = User
