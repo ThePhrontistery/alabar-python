@@ -90,14 +90,7 @@ user_group = db.Table('user_group',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id_user'), primary_key=True),
     db.Column('group_id', db.Integer, db.ForeignKey('group.id_group'), primary_key=True) )
 
-class Table:
-    topics = Topic
-    users = User
-    #survey = Survey
-    #selected_project: int
-    #selected_survey: int
-    #survey_has_answers: int
-    
+
 @dataclass
 class Answer:
     emoji: str
@@ -112,16 +105,12 @@ class Stat:
 
 @dataclass
 class Topic_data:
-    #id_topic: int
     title_topic: str
     id_owner: int
     type_topic: str
-    #start_date: datetime.datetime.now()
     end_date: datetime.datetime
-    #status: True
-    #participation: 0
-    #deleted_date: datetime.datetime(9999, 12, 31)
 
+@dataclass
 class Topic_ticket_user:
-    topic_tickets = Topic_ticket
-    users = User
+    topic_tickets: List[Topic_ticket]
+    users: List[User]
