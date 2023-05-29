@@ -7,7 +7,7 @@
 
   <table class="table table-zebra w-full">
     <!-- head -->
-    <thead>
+    <thead class=tr_index>
       <tr>
         <th>Title</th>
         <th>Status</th>
@@ -20,7 +20,7 @@
     </thead>
     <tbody>
       {% for topic in table_topics %}
-      <tr>
+      <tr class=tr_index>
         <td>
           {% if topic.type_topic == 'MultipleChoiceTextTopic' %}            
             <a href="{{ url_for('alabar.multiple_choice_text', topic_id = topic.id_topic) }}">{{topic.title_topic}}</a>            
