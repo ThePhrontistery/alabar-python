@@ -378,3 +378,17 @@ def get_users_by_id_group(id_group):
     group = get_group_by_id_group(id_group)
     #esta función devuelve la propiedad users (objeto User) del objeto Group
     return group.users
+
+def save_results_usergroup(usersgroup,topic_id):
+    "Estando en pantalla NEW TOPIC,al dar al botón ADD GROUP se graba en BBDD todos los usuarios"
+    with transactional_session() as session:
+        for usergroup in usersgroup:            
+            #Comprobar que el registro a insertar en topic_ticket no existe
+            topic_ticket = get_topic_ticket_by_topic_and_user(topic_id, usergroup.id_user)
+            #Si no lo encuentra llama a create_topic_ticket (al dar al botón ADD GROUP se graba en BBDD de topic_ticket)->True o False 
+            if topic_ticket == None:
+                #Metodo create_topic_user que inserta en 'Topic_ticket' cada user (devuelve topic_ticket) 
+                create_topic_ticket(usergroup.id_user,topic_id)
+            
+        result = True
+        return result 

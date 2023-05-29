@@ -4,7 +4,7 @@
 {% block content %}
 
 <h1 class="text-xl font-bold">Available topics for you</h1>
-<div class="overflow-x-auto">
+
   <table class="table table-zebra w-full">
     <!-- head -->
     <thead>
@@ -13,13 +13,15 @@
         <th>Status</th>
         <th>Owner</th>
         <th>End Date</th>
-        <th></th><th></th>
+        <th></th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       {% for topic in table_topics %}
       <tr>
-        <td rowspan="3">
+        <td>
           {% if topic.type_topic == 'MultipleChoiceTextTopic' %}            
             <a href="{{ url_for('alabar.multiple_choice_text', topic_id = topic.id_topic) }}">{{topic.title_topic}}</a>            
           {% elif topic.type_topic == 'MultipleChoiceImageTopic' %}
@@ -39,48 +41,41 @@
         </td>
         
         {% if topic.status == True and (current_date < topic.end_date) %}
-        <td rowspan="3">Open - please vote</td>
+        <td>Open - please vote</td>
         {% else %}
-        <td rowspan="3">Closed - view results</td>
+        <td>Closed - view results</td>
         {%endif%}
-        <td rowspan="3">{{topic.id_owner}}</td>
-        <td rowspan="3" colspan="4">{{topic.end_date.strftime('%d-%m-%Y')}}</td>
+        <td>{{topic.id_owner}}</td>
+        <td>{{topic.end_date.strftime('%d-%m-%Y')}}</td>
         {% if session['CURRENT_NAME'] == topic.id_owner %}
           
-            <td colspan="3">
+            <td>
               {% if (topic.status == False and topic.participation < 100) or 
                     (current_date >= topic.end_date and topic.participation < 100)  %} 
-              <a href="{{ url_for('alabar.reopen', topic_id = topic.id_topic) }}"> Reopen</a>
-              {% elif topic.participation == 100  %}
-              <a onmouseover="alert('Participation is 100%. The topic cannot be reopened')">Reopen</a>
+                <a href="{{ url_for('alabar.reopen', topic_id = topic.id_topic) }}" class="bordered">&nbsp;&nbsp;Reopen&nbsp;&nbsp;</a>
               {%else%}
-              <a onmouseover="alert('Topic is already open')">Reopen</a>            
+                <label Disabled></label>            
               {%endif%}
             </td>
-      </tr>  
-      <tr>    
-            <td colspan="3">
-              <a href="{{ url_for('alabar.delete', topic_id = topic.id_topic) }}">Delete</a>
+            <td>
+              <a href="{{ url_for('alabar.delete', topic_id = topic.id_topic) }}" class="bordered">&nbsp;&nbsp;Delete&nbsp;&nbsp;</a>
+            </td>
+            <td>
+              {% if topic.status == False  or current_date >= topic.end_date  %} 
+                <label Disabled></label> 
+              {%else%}
+                <a href="{{ url_for('alabar.close', topic_id = topic.id_topic) }}" class="bordered">&nbsp;&nbsp;Close&nbsp;&nbsp;</a>
+              {%endif%}
             </td>
       </tr>   
-      <tr>    
-        <td colspan="3">
-          {% if topic.status == False  or current_date >= topic.end_date  %} 
-            <a onmouseover="alert('Topic is already closed')">Close</a>
-          {%else%}
-            <a href="{{ url_for('alabar.close', topic_id = topic.id_topic) }}">Close</a>
-          {%endif%}
-        </td>
-      </tr>   
+        
         {% else %}
-            <td colspan="3"></td>
+            <td></td>
+            <td></td>
+            <td></td>
       </tr>  
-      <tr>    
-            <td colspan="3"></td>
-      </tr>    
-      <tr>    
-            <td colspan="3"></td>
-      </tr>    
+      
+        
         {%endif%}
        <!--<td class="{{'hidden' if session['CURRENT_NAME'] != topic.id_owner}}">Reopen
           Delete</td><-->
@@ -92,7 +87,7 @@
       {% endfor %}
     </tbody>
   </table>
-</div>
+
 
 {% endblock %}
 
