@@ -1,10 +1,18 @@
 
 {% for item in items %}
 <div class="flex mb-4 items-center">
-  <p class="w-full text-grey-darkest">{{ item.text_answers}}</p>
-  <form class="flex">
-      <input type="hidden" value="{{item.id_topic_item}}" name="id_topic_item"></input>
-      <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete item</a>
-  </form>
+  <table>
+    <tr>
+      <td width="500px">
+        <p class="w-full text-grey-darkest">{{ item.text_answers}}</p>
+      </td>
+      <td width="300px">
+        <form class="flex">
+            <input type="hidden" value="{{item.id_topic_item}}" name="id_topic_item"></input>
+            <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete item</a>
+        </form>
+      </td>
+    </tr>
+  </table>
   </div>
 {% endfor %}

@@ -1,13 +1,21 @@
 
 {% for topic_ticket_user in topic_ticket_user %}
-<div class="flex mb-4 items-center">
-  <p class="w-full text-grey-darkest">{{ topic_ticket_user.name_user}}</p>
+<div class="flex mb-4 items-center">  
   <form class="flex">
       <!--pre>{{ topic_id | pprint }}</pre>-->
       <!--<pre>{{ topic_ticket_user.id_user | pprint }}</pre>-->
-      <input type="hidden" value="{{topic_id}}" name="topic_id"></input>
-      <input type="hidden" value="{{topic_ticket_user.id_user}}" name="id_user"></input>
-      <a href="#" hx-post="{{ url_for('alabar.delete_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete user</a>
+      <table>
+        <tr>
+          <td width="300px">
+            <input type="hidden" value="{{topic_id}}" name="topic_id"></input>
+            <input type="hidden" value="{{topic_ticket_user.id_user}}" name="id_user"></input>
+            <p class="w-full text-grey-darkest">{{ topic_ticket_user.name_user}}</p>
+          </td>
+          <td width="300px">
+            <a href="#" hx-post="{{ url_for('alabar.delete_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-xs btn-secondary" align="right">Delete user</a
+          </td>
+        </tr>
+      </table>
   </form>
   </div>
 {% endfor %}
