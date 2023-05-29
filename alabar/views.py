@@ -2,7 +2,7 @@ from typing import List
 import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_results_usergroup, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Group, Topic, Topic_data, Topic_ticket, Topic_ticket_user, User
 
 
@@ -316,3 +316,23 @@ def render_usersgroup(id_group):
     #en este punto ya no tenemos id_group, porque solo retornamos el objeto de tipo users.
     usersgroup = get_users_by_id_group(id_group)
     return render_template('usersgroup.html', usersgroup=usersgroup)
+
+@alabar_bp.route('/alabar/add_usersgroup', methods=['POST'])
+def add_usersgroup():
+    """Actualizacion en BBDD los resultados del topic_ticket habiendo añadido grupo""" 
+    #1.1 Obtenemos datos de pantalla con request.form (id_topic y el id de grupo añadido)
+    topic_id = request.form['id_topic']
+    id_group = request.form['id_group']
+    
+    #1.2. Se recupera el objeto de tipo Group, para acceder a los usuarios que pertenecen a ese grupo    
+    #usersgroup es un objeto de la clase User que nos retorna get_users_by_id_group (return group.users)
+    #en este punto ya no tenemos id_group, porque solo retornamos el objeto de tipo users.
+    usersgroup = get_users_by_id_group(id_group)           
+   
+    #1.3. Se llama al metodo save_results_usergroup para actualizar topic_ticket   
+    # Tiene el metodo 'create_topic_user'
+    # Si ha grabado bien, actualiza la lista de topic_ticket para el id_topic e id_user que se encuentren en user_group
+    if save_results_usergroup(usersgroup,topic_id):
+        return render_users(topic_id)
+    else:
+        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")

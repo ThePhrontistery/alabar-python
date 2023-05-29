@@ -48,14 +48,17 @@
                 <fieldset>   
                     <legend>Add group and/or users to topic</legend>            
                     <div class="form-group">
+                        <input type="hidden" name="id_topic" value={{topic.id_topic}}>
                         <label for="group-select" class="text-l">Choose group </label>
-                        <select id="group-select" hx-get="{{ url_for('alabar.usersgroup') }}" hx-trigger="change" hx-target="#usersgroup-container" name="id_group" class="select select-bordered w-full max-w-xs">
+                        <select id="group-select" hx-get="{{ url_for('alabar.usersgroup') }}" hx-trigger="change" hx-target="#usersgroup-container" name="id_group" class="select select-primary w-full max-w-xs">
                             {% for group in groups %}
                                <option value="{{ group.id_group }}">{{ group.name_group }}</option>
                             {% endfor %}
                         </select>
-                            <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-sm">Add group</button>                        
+                            <button hx-post="{{ url_for('alabar.add_usersgroup') }}" hx-trigger="click" hx-target="#users-container" class="btn btn-outline btn btn-primary">Add group</button>                        
+                            <button hx-post="{{ url_for('alabar.delete_usersgroup') }}" hx-trigger="click" hx-target="#users-container" class="btn btn-outline btn btn-primary">Delete group</button>                        
                     </div>
+                    &nbsp;&nbsp;
                     <div id="usersgroup-container">
                         {% include 'usersgroup.html' %}
                     </div>                 
@@ -66,8 +69,8 @@
                         <label for="name_user" class="text-l ">Add user for Topic</label>
                         <input type="hidden" name="id_topic" value={{topic.id_topic}}>                
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user" id="name_user">
-                        <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="flex-no-shrink btn btn-sm">Add user</button>
-                        <br> </br>   
+                        <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="btn btn-outline btn btn-primary">Add user</button>
+                        <br></br>
                     </div>        
                 </fieldset>   
                 <fieldset>
@@ -84,7 +87,7 @@
                     {% if topic.type_topic != 'RatingTopic' %}                        
                         <input type="hidden" name="id_topic" value={{topic.id_topic}}>
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
-                        <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-sm">Add item</button>
+                        <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="btn btn-outline btn btn-primary">Add item</button>
                     {%endif%}
             </form>
         
