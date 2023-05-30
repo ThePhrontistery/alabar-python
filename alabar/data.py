@@ -389,6 +389,29 @@ def save_results_usergroup(usersgroup,topic_id):
             if topic_ticket == None:
                 #Metodo create_topic_user que inserta en 'Topic_ticket' cada user (devuelve topic_ticket) 
                 create_topic_ticket(usergroup.id_user,topic_id)
-            
-        result = True
+                result = True
+            else:
+                #Si ha encontrado el usuario en topic_ticket, no lo consideramos error y no lo va a añadir. Devolverá True
+                if topic_ticket.topic_id != 0:
+                    result=True
+                else:            
+                    result=False            
+        
         return result 
+
+def delete_table_usergroup(usersgroup,topic_id):
+    "Estando en pantalla NEW TOPIC,al dar al botón DELETE GROUP se eliminan en BBDD todos los usuarios de ese grupo"
+    with transactional_session() as session:
+        for usergroup in usersgroup:            
+            #Recuperar el registro a borrar en topic_ticket
+            topic_ticket = get_topic_ticket_by_topic_and_user(topic_id, usergroup.id_user)
+            
+            #Borrado en 'Topic_ticket' cada user (devuelve topic_ticket)
+            if topic_ticket != None: 
+                session.delete(topic_ticket)
+                result = True
+            else:
+                result=False
+            
+        
+        return result
