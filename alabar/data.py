@@ -140,7 +140,7 @@ def update_topic(topic):
 def topic_reopen(id_topic,end_date):
     "Estando en pantalla de Modify Topic end_date, ha modifcado end_date y da a save y se actualiza end_date y status a True"
     with transactional_session() as session:
-       update_topic(get_topic_by_id(id_topic),status=True,end_date=end_date)
+       update_topic_2(get_topic_by_id(id_topic),status=True,end_date=end_date)
        result = True
        return result
     
@@ -151,7 +151,7 @@ def topic_delete(id_topic):
        result = True
        return result
     
-def update_topic(topic,status,end_date):
+def update_topic_2(topic,status,end_date):
     '''Update record in topic:update
        Actualizamos en Topic el status del topic y la fecha de fin pásandole el id_topic tanto para reopen como close'''
     topic.status = status
@@ -333,7 +333,7 @@ def show_result_multiple(id_topic):
 def topic_close(id_topic):
     "Estando en pantalla de lista, pulsar el boton close para cerrar topic (False) y actualizar end_date a la del dia"
     with transactional_session() as session:
-       update_topic(get_topic_by_id(id_topic),status=False,end_date=datetime.datetime.now())
+       update_topic_2(get_topic_by_id(id_topic),status=False,end_date=datetime.datetime.now())
        result = True
        return result
 
@@ -415,3 +415,7 @@ def delete_table_usergroup(usersgroup,topic_id):
             
         
         return result
+    
+def get_users():
+    "Select todos los usuarios desde tabla User"
+    return db.session.execute(db.select(User)).scalars().all()    

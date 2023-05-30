@@ -9,10 +9,12 @@ DELETE FROM user_group;
 INSERT INTO "user"
 (id_user, name_user,code_user, email_user, password_hash, password_salt,icon_user)
 VALUES
-(1, 'Marga Nacher','MNacher', 'marga@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
-(2, 'Gonzalo Pardo','GPardo', 'gonzalo@email.com', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.WXj3mfkitZkS76ykL61NQy1cwOFYhCS', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
-(3, 'Jill Esteban','JEsteban', 'jill@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO',''),
-(4, 'Pedro Picapiedra','PPicapiedra', 'pedro@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','')
+(1, 'Laura Gordo','LGordo', 'lgordo@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
+(2, 'Pilar Lapayese','PLapayese', 'plapayese@email.com', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.WXj3mfkitZkS76ykL61NQy1cwOFYhCS', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.',''),
+(3, 'Ana Rodriguez','ARodriguez', 'arodriguez@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO',''),
+(4, 'Cristina Briones','CBriones', 'cbriones@email.com', '$2b$12$Sox8sFxljetZ41VEhcR2SOV8P2pD5dkyKjbFp0LZ6vzGLrb2kE/iu', '$2b$12$Sox8sFxljetZ41VEhcR2SO','')
+(5, 'Jesus Lopez','JLopez', 'jlopez@email.com', '$2b$12$gIcSbXQrWqMHTFhbcNOguOQhSNDDq.nQpuX25Fgfy4HKrrIScnaWm', '$2b$12$gIcSbXQrWqMHTFhbcNOguO',''),
+(6, 'Marivi Yepes','MYepes', 'myepes@email.com', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.WXj3mfkitZkS76ykL61NQy1cwOFYhCS', '$2b$12$6e2DSOJwq.Z/pz8LawWPH.','')
 ;
 
 INSERT INTO "group"
@@ -117,3 +119,4 @@ VALUES
 --(2, 1),
 --(3, 1),
 --(4, 1);
+
