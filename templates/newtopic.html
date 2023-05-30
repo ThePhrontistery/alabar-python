@@ -31,7 +31,7 @@
     <div >
               
             <form>
-                <fieldset>  
+                <fieldset>
                     <legend>Topic data</legend>                  
                     <label>Titulo del topic: </label> 
                     <label class="bg-grey shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker">{{topic.title_topic}}</label>
@@ -45,7 +45,7 @@
                 </fieldset> 
             </form> 
             <form>
-                <fieldset>   
+                <fieldset>              
                     <legend>Add group and/or users to topic</legend>            
                     <div class="form-group">
                         <input type="hidden" name="id_topic" value={{topic.id_topic}}>
@@ -65,13 +65,19 @@
                     <br> </br>
             </form>
             <form>                 
-                    <div>   
-                        <label for="name_user" class="text-l ">Add user for Topic</label>
-                        <input type="hidden" name="id_topic" value={{topic.id_topic}}>                
-                        <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user" id="name_user">
+                <div>
+                        <input type="hidden" name="id_topic" value={{topic.id_topic}}>               
+                    <!--    <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="name_user" placeholder="Add user" id="name_user">--> 
+                        <label for="users-select" class="text-l">Add user for Topic</label>
+                        <select id="users-select" name="id_user" hx-trigger="change" class="select select-primary w-full max-w-xs">
+                            {% for user_list in users_list %}
+                               <option value="{{ user_list.id_user }}">{{ user_list.name_user }}</option>
+                            {% endfor %}
+                        </select>
+  
                         <button hx-post="{{ url_for('alabar.add_user') }}" hx-trigger="click" hx-target="#users-container" class="btn btn-outline btn btn-primary">Add user</button>
                         <br></br>
-                    </div>        
+                    </div>                                             
                 </fieldset>   
                 <fieldset>
                     <legend>Users added to topic</legend>                                     
@@ -81,21 +87,20 @@
                     <br> </br>
                 </fieldset>
             </form>
-            <form>   
-                <fieldset> 
-                    <legend>Create Items for Topic </legend>                
-                    {% if topic.type_topic != 'RatingTopic' %}                        
+            <form>                    
+                    {% if topic.type_topic != 'RatingTopic' %}
+                      <fieldset> 
+                        <legend>Create Items for Topic </legend>    
                         <input type="hidden" name="id_topic" value={{topic.id_topic}}>
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker" name="text_answers" placeholder="Add item">
                         <button hx-post="{{ url_for('alabar.add_item') }}" hx-trigger="click" hx-target="#items-container" class="btn btn-outline btn btn-primary">Add item</button>
+                        <br> </br>
+                        <div id="items-container">
+                            {% include 'items.html' %}
+                        </div>        
+                      </fieldset>                        
                     {%endif%}
-            </form>
-        
-        <br> </br>
-        <div id="items-container">
-            {% include 'items.html' %}
-        </div>        
-        </fieldset>       
+            </form>        
     </div>
 {%endif%}
 

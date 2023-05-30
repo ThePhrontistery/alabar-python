@@ -2,7 +2,7 @@ from typing import List
 import datetime
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
-from alabar.data import delete_table_usergroup, delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users_by_id_group, save_results, save_results_item, save_results_user, save_results_usergroup, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
+from alabar.data import delete_table_usergroup, delete_topic_item, delete_topic_ticket, find_item_by_id_topic_item, find_ticket_by_id_topic, get_groups, get_id_topic_by_data, get_max_id_order_in_topic_item, get_topic_by_id, get_topic_item_by_id_topic, get_topic_ticket_by_topic, get_topic_ticket_by_topic_and_user, get_topics_by_user_and_owner, get_user_by_code, get_user_by_id, get_user_by_name, get_users, get_users_by_id_group, save_results, save_results_item, save_results_user, save_results_usergroup, save_topic_results, show_result, show_result_multiple, topic_close, topic_delete, topic_reopen, typetopics, get_id_topic_by_data
 from alabar.models import Group, Topic, Topic_data, Topic_ticket, Topic_ticket_user, User
 
 
@@ -106,8 +106,10 @@ def newtopic():
     usersgroup = Group().users
     #inicializamos groups que es un objeto de la clase Group  
     groups = Group()
+    #inicializamos users_list que es un objeto de la clase User  
+    users_list = User()
     # La primera vez que va al html el topic no esta creado (entra en la primera parte)
-    return render_template('newtopic.html', typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups,mensajeerror="")
+    return render_template('newtopic.html', typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups,mensajeerror="",users_list=users_list)
 
 @alabar_bp.route('/alabar/save_topic', methods=['POST'])
 def save_topic():
@@ -138,10 +140,11 @@ def save_topic():
         #usersgroup es objeto de clase User (a través de la propiedad users de la clase Group)
         if len(groups) > 0:
            usersgroup=groups[0].users
-        else:
-            return render_template('error.html',
-                               error_message="No hay grupos creados", error_description="Por favor, debe crear algún grupo")
-        return render_template('newtopic.html',typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups, mensajeerror="") 
+        #else:
+        #    return render_template('error.html',
+        #                       error_message="No hay grupos creados", error_description="Por favor, debe crear algún grupo")
+        users_list= get_users()
+        return render_template('newtopic.html',typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups, mensajeerror="", users_list=users_list) 
     else:
         return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
 
@@ -244,17 +247,20 @@ def close():
 def add_user():
     """Actualizacion en BBDD los resultados del topic_ticket""" 
     #1.1 Obtenemos datos de pantalla con request.form (id_topic y el nombre de la persona añadido)
+    #topic_id = request.args.get("id_topic")
+    #user_id = request.args.get("id_user")
     topic_id = request.form['id_topic']
-    name_user = request.form['name_user']
-    
+    #name_user = request.form['name_user']
+    user_id = request.form['id_user']
+
     mensajeerror=""
 
     #1.2. Se recupera el objeto de tipo User, lo necesitamos para acceder a topic_ticket
-    try:
-        user_id = get_user_by_name(name_user).id_user
-    except:        
-        mensajeerror = 'Non existent user'        
-        return render_users(topic_id,mensajeerror)
+    #try:
+    #    user_id = get_user_by_name(name_user).id_user
+    #except:        
+    #    mensajeerror = 'Non existent user'        
+    #    return render_users(topic_id,mensajeerror)
     
     #1.3 Comprobar que el registro a insertar en topic_ticket no existe
     topic_ticket = get_topic_ticket_by_topic_and_user(topic_id, user_id)
@@ -367,4 +373,5 @@ def delete_usersgroup():
             error_description="No se ha podido borrar, inténtelo más tarde"
             return render_users(topic_id,mensajeerror=error_description)
             #return render_template('error.html', error_message="error", )
-        
+
+      
