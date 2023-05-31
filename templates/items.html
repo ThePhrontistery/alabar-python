@@ -9,7 +9,7 @@
       <td width="300px">
         <form class="flex">
             <input type="hidden" value="{{item.id_topic_item}}" name="id_topic_item"></input>
-            <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="flex-no-shrink btn btn-xs btn-secondary">Delete item</a>
+            <a href="#" hx-post="{{ url_for('alabar.delete_item') }}" hx-trigger="click" hx-target="#items-container" class="btn btn-outline btn btn-primary">Delete item</a>
         </form>
       </td>
     </tr>

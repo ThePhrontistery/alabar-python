@@ -108,7 +108,7 @@ def update_ticket(user_code,id_topic):
 def update_topic(topic):
     '''Update record in topic:
        Actualizamos en Topic la participacion y el status del topic (si es el ultimo usuario del grupo del topic en 
-       contestar), pásandole el id_topic'''
+       contestar ademas actualizamos la fecha de fin), pásandole el id_topic'''
     #answer tiene el resultado del metodo get_answers_by_id (que tiene todas las filas de la tabla topic_answer, 
     #únicamente la columna answers para un id_topic)
     answer = get_answer_by_id(topic.id_topic)
@@ -133,9 +133,10 @@ def update_topic(topic):
     # Si la participacion es del 100, se cambia el status a closes (0)
     if topic.participation == 100:
         topic.status = False
+        topic.end_date=datetime.datetime.now()
     # Actualizamos status y participation
     return db.session.execute(db.update(Topic).where(Topic.id_topic == topic.id_topic)
-                              .values(status=topic.status, participation= topic.participation))
+                              .values(status=topic.status, participation= topic.participation,end_date=topic.end_date))
 
 def topic_reopen(id_topic,end_date):
     "Estando en pantalla de Modify Topic end_date, ha modifcado end_date y da a save y se actualiza end_date y status a True"
@@ -391,9 +392,9 @@ def save_results_usergroup(usersgroup,topic_id):
                 create_topic_ticket(usergroup.id_user,topic_id)
                 result = True
             else:
-                #Si ha encontrado el usuario en topic_ticket, no lo consideramos error y no lo va a añadir. Devolverá True
+                #Si ha encontrado el usuario en topic_ticket, no lo va a añadir, mostrará otro mensaje,devolverá None
                 if topic_ticket.topic_id != 0:
-                    result=True
+                    result=None
                 else:            
                     result=False            
         

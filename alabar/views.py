@@ -60,7 +60,7 @@ def rating_results():
     if save_results(id_topic,answer, session['CURRENT_USER']):
         return redirect(url_for('alabar.index'))
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 @alabar_bp.route('/alabar/reopen', methods=['GET'])
 def reopen():
@@ -71,7 +71,7 @@ def reopen():
     if topic:
         return render_template('modifytopic.html', topic=topic)
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido reabrir, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Failed to reopen the topic, please try again later")
 
 
 @alabar_bp.route('/alabar/modify_topic', methods=['POST'])
@@ -86,7 +86,7 @@ def modify_topic():
     if topic_reopen(id_topic,end_date):
         return redirect(url_for('alabar.index'))
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 
 @alabar_bp.route('/alabar/delete', methods=['GET'])
@@ -95,7 +95,7 @@ def delete():
     if topic_delete(id_topic):
         return redirect(url_for('alabar.index'))
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="The topic could not be deleted, please try again later")
 
 @alabar_bp.route('/alabar/newtopic', methods=['GET'])
 def newtopic():
@@ -140,13 +140,11 @@ def save_topic():
         #usersgroup es objeto de clase User (a través de la propiedad users de la clase Group)
         if len(groups) > 0:
            usersgroup=groups[0].users
-        #else:
-        #    return render_template('error.html',
-        #                       error_message="No hay grupos creados", error_description="Por favor, debe crear algún grupo")
+        # users_list es un objeto de la clase Users que muestra en un desplegable la lista de usuarios posibles
         users_list= get_users()
         return render_template('newtopic.html',typetopics=typetopics,topic=topic, usersgroup=usersgroup, groups=groups, mensajeerror="", users_list=users_list) 
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 
 @alabar_bp.route('/alabar/add_item', methods=['POST'])
@@ -171,7 +169,7 @@ def add_item():
     if save_results_item(id_topic, id_order,text_answers):
         return render_items(id_topic)
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 
 def render_items(id_topic):
@@ -233,7 +231,7 @@ def mct_results():
     if save_results(id_topic,answer, session['CURRENT_USER']):
         return redirect(url_for('alabar.index'))
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 @alabar_bp.route('/alabar/close', methods=['GET'])
 def close():
@@ -241,7 +239,7 @@ def close():
     if topic_close(id_topic):
         return redirect(url_for('alabar.index'))
     else:
-        return render_template('error.html', error_message="error", error_description="No se ha podido eliminar, inténtelo más tarde")
+        return render_template('error.html', error_message="error", error_description="Failed to delete, please try again later")
 
 @alabar_bp.route('/alabar/add_user', methods=['POST'])
 def add_user():
@@ -275,7 +273,7 @@ def add_user():
         if save_results_user(user_id,topic_id):
             return render_users(topic_id,mensajeerror)
         else:
-            return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+            return render_template('error.html', error_message="error", error_description="Your response could not be saved, please try again later")
 
 def render_users(topic_id,mensajeerror):
     """Metodo que presenta la lista de topic_ticket y sus users correspondiente actualizada con template""" 
@@ -338,18 +336,24 @@ def add_usersgroup():
     try:
         usersgroup = get_users_by_id_group(id_group)           
     except:
-        error_description="No se ha podido grabar, inténtelo más tarde"
+        error_description="Your response could not be saved, please try again later"
         return render_users(topic_id,mensajeerror=error_description)
    
     #1.3. Se llama al metodo save_results_usergroup para actualizar topic_ticket   
     # Tiene el metodo 'create_topic_user'
     # Si ha grabado bien, actualiza la lista de topic_ticket para el id_topic e id_user que se encuentren en user_group
-    if save_results_usergroup(usersgroup,topic_id):
+    resuts_usersgroup = save_results_usergroup(usersgroup,topic_id)
+    #if save_results_usergroup(usersgroup,topic_id):
+    if resuts_usersgroup:
         return render_users(topic_id,mensajeerror="")
     else:
-        error_description="No se ha podido grabar, inténtelo más tarde"
-        return render_users(topic_id,mensajeerror=error_description)
-        #return render_template('error.html', error_message="error", error_description="No se ha podido grabar su respuesta, inténtelo más tarde")
+        if resuts_usersgroup == None:
+            error_description="One of the users in the group already exists, the rest are added"
+            return render_users(topic_id,mensajeerror=error_description)
+        else: 
+            error_description="Failed to record, please try again later"
+            return render_users(topic_id,mensajeerror=error_description)
+            
 
 @alabar_bp.route('/alabar/delete_usersgroup', methods=['POST'])
 def delete_usersgroup():
@@ -361,7 +365,7 @@ def delete_usersgroup():
     try:
         usersgroup = get_users_by_id_group(id_group)
     except:
-        error_description="No se ha podido borrar, inténtelo más tarde"
+        error_description="Could not delete, please try again later"
         return render_users(topic_id,mensajeerror=error_description)
     
     if usersgroup != None: 
@@ -370,7 +374,7 @@ def delete_usersgroup():
             # Para volver a presentar los topic_ticket del id_topic necesitamos tenerlo (para el render_users)        
             return render_users(topic_id,mensajeerror="")
         else:
-            error_description="No se ha podido borrar, inténtelo más tarde"
+            error_description="Could not delete, please try again later"
             return render_users(topic_id,mensajeerror=error_description)
             #return render_template('error.html', error_message="error", )
 
