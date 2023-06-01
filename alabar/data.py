@@ -196,11 +196,13 @@ def show_result(id_topic):
     return results
 
 def get_possible_answers():
-    a = Answer("😭", 1, "Sad", 0)
-    b = Answer("🙁", 2, "Dissapointed", 0)
+    a = Answer("😃", 1, "Happy", 0)
+    b = Answer("😊", 2, "Contented", 0)
     c = Answer("😐", 3, "Neutral", 0)
-    d = Answer("😊", 4, "Contented", 0)
-    e = Answer("😃", 5, "Happy", 0)
+    d = Answer("🙁", 4, "Dissapointed", 0)
+    e = Answer("😭", 5, "Sad", 0)
+  
+
     answers = [a, b, c, d, e]
     return answers
 
